@@ -1,0 +1,45 @@
+<?php
+require_once 'connect.php';
+session_start();
+class CategoryModel
+{
+   private $conn;
+
+   public function __construct()
+   {
+      $this->conn = (new Connect())->connect();
+   }
+
+   public function getAllCategories()
+   {
+      $sql = "SELECT * FROM category";
+      return $this->conn->query($sql);
+   }
+   public function addCategory()
+   {
+      if (isset($_POST['upload'])) {
+         $sql = "select * from category where name = '$_POST[name]'";
+         $result = $this->conn->query($sql);
+         if ($result->num_rows > 0) {
+            $_SESSION['errorInsert'] = "Danh mục {$_POST['name']} đã tồn tại";
+            return;
+         }
+         $sql = "INSERT INTO category (name, description) VALUES ('$_POST[name]', '$_POST[description]')";
+         $this->conn->query($sql);
+      }
+   }
+   public function updateCategory()
+   {
+      if (isset($_POST['update'])) {
+         $sql = "UPDATE category SET name = '$_POST[name]', description = '$_POST[description]' WHERE id = '$_GET[id]'";
+         $this->conn->query($sql);
+      }
+   }
+   public function deleteCategory()
+   {
+      $sql = "DELETE FROM category WHERE id = '$_GET[id]'";
+      return $this->conn->query($sql);
+   }
+
+}
+
