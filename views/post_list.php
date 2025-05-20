@@ -2,8 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <?php
 include 'head.php';
-require_once '../models/postModel.php';
-require_once '../models/categoryModel.php';
+require_once '../models/userModel.php';
 ?>
 
 <body>
@@ -38,8 +37,8 @@ require_once '../models/categoryModel.php';
                               </thead>
                               <tbody>
                                  <?php
-                                 $postModel = new PostModel();
-                                 $posts = $postModel->getAllPosts();
+                                 $userModel = new UserModel();
+                                 $posts = $userModel->getAllPosts();
                                  $order = 1;
                                  if ($posts->num_rows === 0) {
                                     echo "<tr><td colspan='8' style='text-align: center;'>Không có dữ liệu</td></tr>";
@@ -47,7 +46,7 @@ require_once '../models/categoryModel.php';
                                     foreach ($posts as $row) {
                                        ?>
                                        <form
-                                          action="../controllers/postController.php?action=update&id=<?php echo $row['id']; ?>"
+                                          action="../controllers/userController.php?action=update&id=<?php echo $row['id']; ?>"
                                           method="post" enctype="multipart/form-data">
                                           <tr>
                                              <td style="text-align: center;"><?php echo $order++; ?></td>
@@ -90,7 +89,7 @@ require_once '../models/categoryModel.php';
                                                       <?php echo $row['category']; ?>
                                                    </option>
                                                    <?php
-                                                   $categories = (new CategoryModel())->getAllCategories();
+                                                   $categories = (new AdminModel())->getAllCategories();
                                                    foreach ($categories as $category) {
                                                       if ($category['name'] != $row['category']) {
                                                          echo "<option value='" . $category['name'] . "'>" . $category['name'] . "</option>";
@@ -109,7 +108,7 @@ require_once '../models/categoryModel.php';
                                              <td style="text-align: center;">
 
                                                 <input class="btn btn-info btn-sm" type="submit" name="update" value="Update">
-                                                <a href="../controllers/contentController.php?action=delete&id=<?php echo $row['id']; ?>"
+                                                <a href="../controllers/userController.php?action=delete&id=<?php echo $row['id']; ?>"
                                                    onclick="return confirm('Bạn có muốn xóa bài viết này không?');"
                                                    class="btn btn-danger btn-sm">Delete</a>
 

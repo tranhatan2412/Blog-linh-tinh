@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <?php include 'head.php';
-require_once '../models/categoryModel.php';
+require_once '../models/adminModel.php';
 ?>
 
 <body>
@@ -59,8 +59,8 @@ require_once '../models/categoryModel.php';
                                         </thead>
                                         <tbody>
                                             <?php
-                                            $categoryModel = new CategoryModel();
-                                            $categories = $categoryModel->getAllCategories();
+                                            $adminModel = new AdminModel();
+                                            $categories = $adminModel->getAllCategories();
                                             $order = 1;
                                             if ($categories->num_rows === 0) {
                                                 echo "<tr><td colspan='4' style='text-align: center;'>Không có dữ liệu</td></tr>";
@@ -68,7 +68,7 @@ require_once '../models/categoryModel.php';
                                                 foreach ($categories as $row) {
                                                     ?>
                                                     <form
-                                                        action="../controllers/categoryController.php?action=update&id=<?php echo $row['id']; ?>"
+                                                        action="../controllers/adminModel.php?action=updateCategory&id=<?php echo $row['id']; ?>"
                                                         method="post">
                                                         <tr>
                                                             <td style="text-align: center;"><?php echo $order++; ?></td>
@@ -91,7 +91,7 @@ require_once '../models/categoryModel.php';
                                                                 <input class="btn btn-info btn-sm" type="submit" name="update"
                                                                     value="Update">
 
-                                                                <a href="../controllers/categoryController.php?action=delete&id=<?php echo $row['id']; ?>"
+                                                                <a href="../controllers/adminModel.php?action=deleteCategory&id=<?php echo $row['id']; ?>"
                                                                     onclick="return confirm('Bạn có muốn xóa danh mục này không?');"
                                                                     class="btn btn-danger btn-sm">Delete</a>
                                                             </td>

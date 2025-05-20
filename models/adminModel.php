@@ -1,9 +1,9 @@
 <?php
 require_once 'connect.php';
 session_start();
-class CategoryModel
+class AdminModel extends UserModel
 {
-   private $conn;
+   protected $conn;
 
    public function __construct()
    {
@@ -40,6 +40,15 @@ class CategoryModel
       $sql = "DELETE FROM category WHERE id = '$_GET[id]'";
       return $this->conn->query($sql);
    }
+   public function getAllUsers() {
+      $sql = "SELECT * FROM user";
+      return $this->conn->query($sql);
+   }
+   public function deleteUser() {
+      $sql = "DELETE FROM user WHERE id = '$_GET[id]'";
+      return $this->conn->query($sql);
+   }
+
 
 }
 

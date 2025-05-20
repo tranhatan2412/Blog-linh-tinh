@@ -44,9 +44,9 @@
                                         <label>Category</label>
                                         <select class="form-control" name="category">
                                             <?php
-                                            require_once '../models/categoryModel.php';
-                                            $categoryModel = new CategoryModel();
-                                            $categories = $categoryModel->getAllCategories();
+                                            require_once '../models/adminModel.php';
+                                            $adminModel = new AdminModel();
+                                            $categories = $adminModel->getAllCategories();
                                             if ($categories->num_rows === 0) {
                                                 echo "<option value=''>Không có danh mục</option>";
                                             } else {

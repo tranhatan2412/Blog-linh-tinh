@@ -3,6 +3,13 @@ create table if not exists category(
    name varchar(255) not null unique,
    description text
 );
+create table if not exists user(
+   id int primary key auto_increment,
+   username varchar(255) not null unique,
+   password varchar(255) not null,
+   email varchar(255) not null unique,
+   created date default (current_date)
+);
 create table if not exists post(
    id int primary key auto_increment,
    title varchar(255) not null unique,
@@ -11,6 +18,9 @@ create table if not exists post(
    author varchar(255) not null,
    category varchar(255) not null,
    image varchar(255),
-   date date default current_date,
-   foreign key (category) references category(name) on delete cascade on update cascade
+   created date default (current_date),
+   foreign key (category) references category(name) on delete cascade on update cascade,
+   foreign key (author) references user(username) on delete cascade on update cascade
 );
+alter table post add column updated date default (current_date);
+select * from user
