@@ -1,122 +1,69 @@
 <?php
 session_start();
 
-// Xử lý đăng xuất
 if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
   unset($_SESSION['username']);
-  // Chuyển hướng để tránh F5 làm mất session
   header('Location: index.php');
   exit;
 }
 
-// Xử lý đăng ký thành công từ URL
-if (isset($_GET['register_success']) && $_GET['register_success'] == 'true' && isset($_GET['username'])) {
-  $_SESSION['username'] = $_GET['username'];
-}
-
-// Xử lý đăng nhập thành công từ URL
-if (isset($_GET['login_success']) && $_GET['login_success'] == 'true' && isset($_GET['username'])) {
-  $_SESSION['username'] = $_GET['username'];
-}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
-<head>
-  <title>SimpleMagazine 01</title>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  <link rel="stylesheet" media="screen,projection" type="text/css" href="assets/css/main.css" />
-  <link rel="stylesheet" media="screen,projection" type="text/css" href="assets/css/skin.css" />
-  <link rel="stylesheet" href="assets/css/font-awesome.css">
-  <script type="text/javascript" src="assets/js/cufon-yui.js"></script>
-  <script type="text/javascript" src="assets/js/font.font.js"></script>
-  <script type="text/javascript" src="assets/js/main.js"></script>
-  <script>
-    Cufon.replace('h1, h2, h3, h4, h5, h6', {
-      hover: true
-    });
-  </script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
+<?php include 'views/headIndex.php'; ?>
 
 <body>
   <!-- START PAGE SOURCE -->
   <div class="main">
-    <div id="header" class="box">
-      <h1 id="logo">Blog<span>LinhTinh</span> <i class="fa fa-pencil" aria-hidden="true"></i></h1>
-      <ul id="nav">
-        <li class="current"><a href="index.php"><i class="fa fa-home" aria-hidden="true"></i> Trang chủ</a></li>
-        <li><a href="subpage.html"><i class="fa fa-envelope" aria-hidden="true"></i> Liên hệ</a></li>
-        <li><a href="#"><i class="fa fa-info-circle" aria-hidden="true"></i> Giới thiệu</a></li>
-        <?php
-        if (!isset($_SESSION['username'])) { ?>
-          <li class="auth-buttons"><a href="#" id="registerBtn"><i class="fa fa-user-plus" aria-hidden="true"></i> Đăng
-              ký</a></li>
-          <li class="auth-buttons"><a href="#" id="loginBtn"><i class="fa fa-sign-in" aria-hidden="true"></i> Đăng
-              nhập</a></li><?php
-        } else {
-          ?>
-          <li class="user-dropdown" id="userDropdown">
-            <div class="user-dropdown-toggle">
-              <i class="fa fa-user" aria-hidden="true"></i>
-              <span id="username-display"><?php echo $_SESSION['username']; ?></span>
-              <i class="fa fa-caret-down" aria-hidden="true"></i>
-            </div>
-            <div class="user-dropdown-menu">
-              <a href="#"><i class="fa fa-id-card" aria-hidden="true"></i> Thông tin cá nhân</a>
-              <a href="#"><i class="fa fa-file-text" aria-hidden="true"></i> Bài viết đã đăng
-                <span class="notification-badge">3</span>
-              </a>
-              <a href="#" class="logout-link" id="logoutBtn"><i class="fa fa-sign-out" aria-hidden="true"></i> Đăng
-                xuất</a>
-            </div>
-          </li>
-          <?php
-        }
-        ?>
-      </ul>
-    </div>
+    <?php include 'utils/user-display.php';
+    include 'views/menu.php' ?>
     <form action="#" method="get" id="search">
-          <h3><i class="fa fa-filter"></i> Bộ lọc tìm kiếm</h3>
-          <div class="filter-box modern-filter">
-            <div class="search-row">
-              <div class="input-with-icon">
-                <i class="fa fa-user"></i>
-                <input type="text" class="input-text" placeholder="Tìm theo tên tác giả..." />
-              </div>
-              
-              <div class="input-with-icon">
-                <i class="fa fa-book"></i>
-                <input type="text" class="input-text" placeholder="Tìm theo tiêu đề..." />
-              </div>
-              
-              <div class="filter-item">
-                <div class="dropdown-check-list" id="categoryDropdown">
-                  <span class="anchor"><i class="fa fa-tags"></i> Chọn thể loại <span class="category-count">0</span></span>
-                  <ul class="items">
-                    <li><input type="checkbox" id="cat1" name="category[]" value="1" /><label for="cat1">Tin tức</label></li>
-                    <li><input type="checkbox" id="cat2" name="category[]" value="2" /><label for="cat2">Công nghệ</label></li>
-                    <li><input type="checkbox" id="cat3" name="category[]" value="3" /><label for="cat3">Giải trí</label></li>
-                    <li><input type="checkbox" id="cat4" name="category[]" value="4" /><label for="cat4">Thể thao</label></li>
-                    <li><input type="checkbox" id="cat5" name="category[]" value="5" /><label for="cat5">Đời sống</label></li>
-                    <li class="clear-all"><button type="button" id="clearAllBtn">Xóa tất cả</button></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            
-            <div class="active-filters">
-              <div class="filter-count">Bộ lọc đang áp dụng: <span>0</span></div>
-              <div class="filter-tags"></div>
-            </div>
-            
-            <div class="submit-buttons">
-              <button type="submit" class="btn-search" name="search"><i class="fa fa-search"></i> Tìm kiếm</button>
-              <button type="button" class="btn-reset"><i class="fa fa-refresh"></i> Đặt lại</button>
-            </div>
-
+      <h3><i class="fa fa-filter"></i> Bộ lọc tìm kiếm</h3>
+      <div class="filter-box modern-filter">
+        <div class="search-row">
+          <div class="input-with-icon">
+            <i class="fa fa-user"></i>
+            <input type="text" class="input-text" placeholder="Tìm theo tên tác giả..." />
           </div>
-        </form>
+
+          <div class="input-with-icon">
+            <i class="fa fa-book"></i>
+            <input type="text" class="input-text" placeholder="Tìm theo tiêu đề..." />
+          </div>
+
+          <div class="filter-item">
+            <div class="dropdown-check-list" id="categoryDropdown">
+              <span class="anchor"><i class="fa fa-tags"></i> Chọn thể loại <span class="category-count">0</span></span>
+              <ul class="items">
+                <li><input type="checkbox" id="cat1" name="category[]" value="1" /><label for="cat1">Tin tức</label>
+                </li>
+                <li><input type="checkbox" id="cat2" name="category[]" value="2" /><label for="cat2">Công nghệ</label>
+                </li>
+                <li><input type="checkbox" id="cat3" name="category[]" value="3" /><label for="cat3">Giải trí</label>
+                </li>
+                <li><input type="checkbox" id="cat4" name="category[]" value="4" /><label for="cat4">Thể thao</label>
+                </li>
+                <li><input type="checkbox" id="cat5" name="category[]" value="5" /><label for="cat5">Đời sống</label>
+                </li>
+                <li class="clear-all"><button type="button" id="clearAllBtn">Xóa tất cả</button></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="active-filters">
+          <div class="filter-count">Bộ lọc đang áp dụng: <span>0</span></div>
+          <div class="filter-tags"></div>
+        </div>
+
+        <div class="submit-buttons">
+          <button type="submit" class="btn-search" name="search"><i class="fa fa-search"></i> Tìm kiếm</button>
+          <button type="button" class="btn-reset"><i class="fa fa-refresh"></i> Đặt lại</button>
+        </div>
+
+      </div>
+    </form>
     <div id="section" class="box">
       <div id="content">
         <ul class="articles box">
@@ -200,7 +147,7 @@ if (isset($_GET['login_success']) && $_GET['login_success'] == 'true' && isset($
         </div>
       </div>
       <div id="aside">
-        
+
 
         <h3>Sidebar Menu</h3>
         <ul class="menu">
@@ -239,24 +186,28 @@ if (isset($_GET['login_success']) && $_GET['login_success'] == 'true' && isset($
     <div class="modal-content">
       <span class="close" id="closeLogin">&times;</span>
       <h2 class="form-title"><i class="fa fa-sign-in"></i> Đăng nhập</h2>
-      <form action="../controllers/userController.php?action=login" method="post">
+
+      <div id="loginErrorArea" class="error-message" style="display: none;">
+        <div class="alert alert-danger">
+          <i class="fa fa-exclamation-circle"></i>
+          <span id="loginErrorMessage"></span>
+        </div>
+      </div>
+
+      <form id="loginForm" action="/Admin/controllers/userController.php?action=login" method="post">
         <div class="form-group">
           <label for="loginEmail">Email hoặc tên đăng nhập</label>
-          <input type="text" id="loginEmail" name="loginEmail" class="form-control" required>
+          <input type="text" id="loginEmail" name="email_username" class="form-control" required>
         </div>
         <div class="form-group">
           <label for="loginPassword">Mật khẩu</label>
           <div style="position: relative;">
-            <input type="password" id="loginPassword" name="loginPassword" class="form-control" required>
-            <i class="fa fa-eye-slash toggle-password" aria-hidden="true"
+            <input type="password" id="loginPassword" name="password" class="form-control" required>
+            <i class="fa fa-eye-slash toggle-password"
               style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
           </div>
         </div>
-        <div class="form-group">
-          <input type="checkbox" id="remember" name="remember">
-          <label for="remember" style="display: inline-block; margin-left: 5px;">Ghi nhớ đăng nhập</label>
-        </div>
-        <button type="submit" class="btn-submit">Đăng nhập</button>
+        <input id="login" type="submit" class="btn-submit" name="login" value="Đăng nhập">
         <div class="form-footer">
           <p>Chưa có tài khoản? <a href="#" id="switchToRegister">Đăng ký ngay</a></p>
           <p><a href="#">Quên mật khẩu?</a></p>
@@ -270,7 +221,15 @@ if (isset($_GET['login_success']) && $_GET['login_success'] == 'true' && isset($
     <div class="modal-content">
       <span class="close" id="closeRegister">&times;</span>
       <h2 class="form-title"><i class="fa fa-user-plus"></i> Đăng ký tài khoản</h2>
-      <form action="../controllers/userController.php?action=register" method="post">
+
+      <div id="registerErrorArea" class="error-message" style="display: none;">
+        <div class="alert alert-danger">
+          <i class="fa fa-exclamation-circle"></i>
+          <span id="registerErrorMessage"></span>
+        </div>
+      </div>
+
+      <form id="registerForm" action="/Admin/controllers/userController.php?action=register" method="post">
         <div class="form-group">
           <label for="username">Tên đăng nhập</label>
           <input type="text" id="username" name="username" placeholder="Sử dụng làm tên tác giả đăng bài"
@@ -289,7 +248,7 @@ if (isset($_GET['login_success']) && $_GET['login_success'] == 'true' && isset($
             <i class="fa fa-eye-slash toggle-password" aria-hidden="true"
               style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
           </div>
-          <small class="form-text text-muted">Mật khẩu phải có ít nhất 8 ký tự</small>
+          <small id="passwordLengthMessage" class="password-check"></small>
         </div>
         <div class="form-group">
           <label for="confirmPassword">Xác nhận mật khẩu</label>
@@ -301,7 +260,7 @@ if (isset($_GET['login_success']) && $_GET['login_success'] == 'true' && isset($
           <small id="passwordMatchMessage" class="form-text" style="display: none;"></small>
         </div>
 
-        <button type="submit" class="btn-submit">Đăng ký</button>
+        <input id="register" type="submit" class="btn-submit" name="register" value="Đăng ký">
         <div class="form-footer">
           <p>Đã có tài khoản? <a href="#" id="switchToLogin">Đăng nhập</a></p>
         </div>

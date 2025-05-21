@@ -23,4 +23,6 @@ create table if not exists post(
    foreign key (author) references user(username) on delete cascade on update cascade
 );
 alter table post add column updated date default (current_date);
-select * from user
+alter table user add column role varchar(10) default 'user';
+select * from user;
+update user set role = 'admin' where username = 'tranhatan'

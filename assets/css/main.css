@@ -523,32 +523,72 @@ img.f-right {
 	display: flex;
 	align-items: center;
 	cursor: pointer;
-	padding: 8px 15px;
-	border-radius: 4px;
-	transition: all 0.3s ease;
-	background-color: rgba(255, 255, 255, 0.1);
+	padding: 10px 18px;
+	border-radius: 50px;
+	transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+	background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
 	color: #fff;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	position: relative;
+	overflow: hidden;
 }
 
 .user-dropdown-toggle:hover {
-	background-color: rgba(255, 255, 255, 0.2);
+	background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.1));
 	transform: translateY(-2px);
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.user-dropdown-toggle:active {
+	transform: translateY(0);
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
 .user-dropdown-toggle i.fa-user {
-	margin-right: 8px;
+	margin-right: 10px;
 	font-size: 16px;
 	color: #FFD700;
+	transition: all 0.3s ease;
 }
 
 .user-dropdown-toggle i.fa-caret-down {
-	margin-left: 8px;
+	margin-left: 10px;
 	transition: transform 0.3s ease;
+	font-size: 14px;
+	opacity: 0.8;
 }
 
 .user-dropdown.active .user-dropdown-toggle i.fa-caret-down {
 	transform: rotate(180deg);
+}
+
+/* Hiệu ứng ripple cho user-dropdown */
+.user-dropdown-toggle .ripple {
+	position: absolute;
+	border-radius: 50%;
+	background-color: rgba(255, 255, 255, 0.4);
+	transform: scale(0);
+	animation: ripple-effect 0.6s linear;
+	opacity: 0.5;
+}
+
+@keyframes ripple-effect {
+	to {
+		transform: scale(2.5);
+		opacity: 0;
+	}
+}
+
+/* Hiệu ứng pulse cho username */
+.user-dropdown-toggle #username-display {
+	position: relative;
+	font-weight: 500;
+	transition: all 0.3s ease;
+}
+
+.user-dropdown:hover #username-display {
+	text-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
 }
 
 .user-dropdown-menu {
@@ -557,21 +597,20 @@ img.f-right {
 	right: 0;
 	top: 100%;
 	background-color: #fff;
-	min-width: 220px;
-	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+	min-width: 250px;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 	z-index: 9999;
-	/* Tăng z-index để đảm bảo hiển thị trên các phần tử khác */
-	border-radius: 8px;
+	border-radius: 12px;
 	overflow: hidden;
-	margin-top: 10px;
-	transform-origin: top center;
-	transform: translateY(-10px);
+	margin-top: 12px;
+	transform-origin: top right;
+	transform: translateY(-10px) scale(0.98);
 	opacity: 0;
-	transition: transform 0.2s ease, opacity 0.2s ease, visibility 0.2s ease;
+	transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 	visibility: hidden;
-	/* Thuộc tính kiểm soát hiển thị */
 	pointer-events: none;
-	/* Vô hiệu hóa sự kiện khi ẩn */
+	border: 1px solid rgba(0, 0, 0, 0.05);
+	backdrop-filter: blur(10px);
 }
 
 .user-dropdown-menu:before {
@@ -585,17 +624,58 @@ img.f-right {
 	transform: rotate(45deg);
 	border-top-left-radius: 4px;
 	box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.05);
+	z-index: -1;
 }
 
 .user-dropdown-menu a {
 	color: #333 !important;
-	padding: 14px 20px;
+	padding: 16px 20px;
 	text-decoration: none;
 	display: flex;
 	align-items: center;
-	transition: all 0.3s ease;
+	transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 	font-weight: 500;
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.menu-item-content {
+	display: flex;
+	flex-direction: column;
+	margin-left: 5px;
+}
+
+.menu-item-content span {
+	font-weight: 500;
+	color: #333;
+	transition: all 0.3s ease;
+}
+
+.menu-item-content small {
+	font-size: 11px;
+	color: #777;
+	margin-top: 3px;
+	transition: all 0.3s ease;
+}
+
+.user-dropdown-menu a:hover .menu-item-content span {
+	color: #007bff;
+}
+
+.user-dropdown-menu a:hover .menu-item-content small {
+	color: #555;
+}
+
+.user-dropdown-menu a.logout-link:hover .menu-item-content span {
+	color: #f44336;
+}
+
+.user-dropdown-menu a.logout-link:hover .menu-item-content small {
+	color: #f44336;
+	opacity: 0.7;
 }
 
 .user-dropdown-menu a:last-child {
@@ -606,27 +686,59 @@ img.f-right {
 	background-color: #f8f9fa;
 	padding-left: 25px;
 	color: #007bff !important;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.user-dropdown-menu a:after {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 0;
+	background: linear-gradient(90deg, rgba(0, 123, 255, 0.1), transparent);
+	transition: width 0.3s ease;
+	z-index: 0;
+}
+
+.user-dropdown-menu a:hover:after {
+	width: 100%;
 }
 
 .user-dropdown-menu a i {
 	margin-right: 12px;
-	width: 20px;
-	height: 20px;
+	width: 32px;
+	height: 32px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	font-size: 16px;
 	color: #555;
 	transition: all 0.3s ease;
+	background-color: #f5f5f5;
+	border-radius: 50%;
+	z-index: 1;
+	position: absolute;
+	left: 20px;
+}
+
+.user-dropdown-menu a .menu-item-content {
+	margin-left: 40px;
 }
 
 .user-dropdown-menu a:hover i {
 	color: #007bff;
 	transform: scale(1.1);
+	background-color: rgba(0, 123, 255, 0.1);
+	box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
 }
 
 .user-dropdown-menu a.logout-link {
 	background-color: #f8f8f8;
+	margin-top: 5px;
+	width: 100%;
+	box-sizing: border-box;
 }
 
 .user-dropdown-menu a.logout-link:hover {
@@ -634,37 +746,68 @@ img.f-right {
 	color: #f44336 !important;
 }
 
+.user-dropdown-menu a.logout-link:hover:after {
+	background: linear-gradient(90deg, rgba(244, 67, 54, 0.1), transparent);
+}
+
+.user-dropdown-menu a.logout-link i {
+	color: #f44336;
+	opacity: 0.7;
+	background-color: rgba(244, 67, 54, 0.1);
+}
+
 .user-dropdown-menu a.logout-link:hover i {
 	color: #f44336;
+	opacity: 1;
+	background-color: rgba(244, 67, 54, 0.2);
+	box-shadow: 0 2px 5px rgba(244, 67, 54, 0.2);
 }
 
 .user-dropdown-menu.show {
 	display: block !important;
-	transform: translateY(0) !important;
+	transform: translateY(0) scale(1) !important;
 	opacity: 1 !important;
 	visibility: visible !important;
 	pointer-events: auto !important;
-	/* Make sure no other settings override these */
 	position: absolute !important;
 	z-index: 10000 !important;
+	animation: dropdown-appear 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+@keyframes dropdown-appear {
+	0% {
+		transform: translateY(-10px) scale(0.98);
+		opacity: 0;
+	}
+
+	100% {
+		transform: translateY(0) scale(1);
+		opacity: 1;
+	}
 }
 
 /* Badge thông báo */
 .notification-badge {
-	position: absolute;
-	top: -5px;
-	right: -5px;
-	background-color: #f44336;
+	background: linear-gradient(135deg, #ff5252, #f44336);
 	color: white;
-	border-radius: 50%;
-	width: 18px;
-	height: 18px;
-	font-size: 10px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-weight: bold;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	border-radius: 12px;
+	padding: 3px 8px;
+	font-size: 11px;
+	position: absolute;
+	right: 15px;
+	top: 50%;
+	transform: translateY(-50%);
+	box-shadow: 0 2px 5px rgba(244, 67, 54, 0.3);
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	font-weight: 600;
+	letter-spacing: 0.5px;
+	transition: all 0.3s ease;
+	z-index: 2;
+}
+
+.user-dropdown-menu a:hover .notification-badge {
+	transform: translateY(-50%) scale(1.1);
+	box-shadow: 0 3px 8px rgba(244, 67, 54, 0.4);
 }
 
 /* Animation cho dropdown */
@@ -1005,6 +1148,85 @@ img.f-right {
 /* Hiệu ứng loading */
 .fa-spin {
 	animation: fa-spin 1s infinite linear;
+}
+
+/* Error message styles */
+.error-message {
+	margin-bottom: 20px;
+}
+
+.alert {
+	padding: 12px 15px;
+	border-radius: 4px;
+	font-size: 14px;
+	position: relative;
+	animation: fadeIn 0.3s ease;
+}
+
+.alert-danger {
+	background-color: #fff8f8;
+	color: #e74c3c;
+	border-left: 4px solid #e74c3c;
+}
+
+.alert i {
+	margin-right: 8px;
+}
+
+/* Password validation styles */
+.password-check {
+	font-size: 13px;
+	padding: 5px 0;
+	margin-top: 5px;
+	display: block;
+	animation: fadeIn 0.3s ease;
+	font-weight: 500;
+}
+
+.password-check.error {
+	color: #e74c3c;
+}
+
+.password-check.valid {
+	color: #2ecc71;
+}
+
+.password-check::before {
+	font-family: FontAwesome;
+	margin-right: 5px;
+}
+
+.password-check.error::before {
+	content: "\f057";
+	/* fa-times-circle */
+}
+
+.password-check.valid::before {
+	content: "\f058";
+	/* fa-check-circle */
+}
+
+/* Disabled button style */
+.btn-submit:disabled {
+	background-color: #cccccc;
+	cursor: not-allowed;
+	opacity: 0.7;
+}
+
+.btn-submit:disabled:hover {
+	background-color: #cccccc;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 @keyframes fa-spin {

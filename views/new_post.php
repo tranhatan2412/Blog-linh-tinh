@@ -1,12 +1,31 @@
-﻿<!DOCTYPE html>
+<?php
+session_start();
+?>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-<?php include 'head.php' ?>
+
+<head>
+    <?php include 'headIndex.php';
+    include 'head.php'
+        ?>
+</head>
+
 
 <body>
+    <?php
+    include '../utils/user-display.php';
+    include 'menu.php' ?>
     <div id="wrapper">
-        <?php include 'head_top.php' ?>
-        <!-- /. NAV TOP  -->
-        <?php include 'head_nav.php' ?>
+        <?php if ($_SESSION['role'] == 'admin') {
+            include 'head_top.php';
+            include 'head_nav.php';
+        } else { ?>
+            <style>
+                #page-wrapper {
+                    margin: 0 0 0 0;
+                }
+            </style>
+        <?php } ?>
         <!-- /. NAV SIDE  -->
         <div id="page-wrapper">
             <div id="page-inner">
@@ -52,10 +71,10 @@
                                             } else {
                                                 foreach ($categories as $category) {
                                                     ?>
-                                                <option value="<?php echo $category['name'] ?>">
-                                                    <?php echo $category['name'] ?>
-                                                </option>
-                                                <?php
+                                                    <option value="<?php echo $category['name'] ?>">
+                                                        <?php echo $category['name'] ?>
+                                                    </option>
+                                                    <?php
                                                 }
                                             }
                                             ?>

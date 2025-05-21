@@ -18,12 +18,38 @@ switch ($action) {
       header('Location: ../views/post_list.php');
       break;
    case 'register':
-      $userModel->register();
-      header('Location: ../views/index.php');
+      $isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+      
+      $result = $userModel->register();
+      
+      if ($isAjax) {
+         header('Content-Type: application/json');
+         echo json_encode($result);
+         exit;
+      } else {
+         if (isset($result['error'])) {
+            $_SESSION['error'] = $result['error'];
+            header('Location: ' . $_SERVER['HTTP_REFERER'] . '?register_error=1');
+         } else
+            header('Location: ../index.php');
+      }
       break;
    case 'login':
-      $userModel->login();
-      header('Location: ../views/index.php');
+      $isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+      
+      $result = $userModel->login();
+      
+      if ($isAjax) {
+         header('Content-Type: application/json');
+         echo json_encode($result);
+         exit;
+      } else {
+         if (isset($result['error'])) {
+            $_SESSION['error'] = $result['error'];
+            header('Location: ' . $_SERVER['HTTP_REFERER'] . '?login_error=1');
+         } else
+            header('Location: ../index.php');
+      }
       break;
    case 'logout':
       session_destroy();

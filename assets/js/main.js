@@ -268,9 +268,32 @@ document.addEventListener('DOMContentLoaded', function () {
    var password = document.getElementById('password');
    var confirmPassword = document.getElementById('confirmPassword');
    var passwordMatchMessage = document.getElementById('passwordMatchMessage');
-   var registerForm = document.querySelector('#registerModal form');
+   var passwordLengthMessage = document.getElementById('passwordLengthMessage');
+   var registerSubmitBtn = document.getElementById('register');
 
-   // Hàm kiểm tra mật khẩu
+   // Lấy các phần tử của form đăng ký
+   var registerForm = document.getElementById('registerForm');
+   var registerErrorArea = document.getElementById('registerErrorArea');
+   var registerErrorMessage = document.getElementById('registerErrorMessage');
+
+   // Hàm kiểm tra độ dài mật khẩu
+   function checkPasswordLength() {
+      if (!password || !passwordLengthMessage) return;
+
+      if (password.value.length < 8) {
+         passwordLengthMessage.textContent = 'Mật khẩu phải có ít nhất 8 ký tự!';
+         passwordLengthMessage.className = 'password-check error';
+         if (registerSubmitBtn) registerSubmitBtn.disabled = true;
+         return false;
+      } else {
+         passwordLengthMessage.textContent = 'Mật khẩu hợp lệ!';
+         passwordLengthMessage.className = 'password-check valid';
+         if (registerSubmitBtn) registerSubmitBtn.disabled = validateForm() ? false : true;
+         return true;
+      }
+   }
+
+   // Hàm kiểm tra mật khẩu khớp nhau
    function checkPasswordMatch() {
       if (!confirmPassword || !password || !passwordMatchMessage) return;
 
@@ -281,79 +304,54 @@ document.addEventListener('DOMContentLoaded', function () {
 
       if (password.value === confirmPassword.value) {
          passwordMatchMessage.textContent = 'Mật khẩu khớp!';
-         passwordMatchMessage.style.color = 'green';
+         passwordMatchMessage.className = 'password-check valid';
          passwordMatchMessage.style.display = 'block';
          confirmPassword.setCustomValidity('');
+         if (registerSubmitBtn) registerSubmitBtn.disabled = validateForm() ? false : true;
       } else {
          passwordMatchMessage.textContent = 'Mật khẩu không khớp!';
-         passwordMatchMessage.style.color = 'red';
+         passwordMatchMessage.className = 'password-check error';
          passwordMatchMessage.style.display = 'block';
          confirmPassword.setCustomValidity('Mật khẩu không khớp');
+         if (registerSubmitBtn) registerSubmitBtn.disabled = true;
       }
    }
 
+   // Hàm kiểm tra toàn bộ form
+   function validateForm() {
+      var isPasswordValid = password && password.value.length >= 8;
+      var isPasswordMatch = password && confirmPassword && password.value === confirmPassword.value;
+      return isPasswordValid && isPasswordMatch;
+   }
+
    // Gắn sự kiện kiểm tra khi nhập
-   if (password) password.addEventListener('input', checkPasswordMatch);
-   if (confirmPassword) confirmPassword.addEventListener('input', checkPasswordMatch);
-
-   // Kiểm tra khi submit form đăng ký
-   if (registerForm) {
-      registerForm.addEventListener('submit', function (e) {
-         e.preventDefault();
-
-         // Kiểm tra mật khẩu khớp nhau
-         if (password.value !== confirmPassword.value) {
+   if (password) {
+      password.addEventListener('input', function () {
+         checkPasswordLength();
+         if (confirmPassword && confirmPassword.value) {
             checkPasswordMatch();
-            return;
          }
-
-         // Kiểm tra các trường bắt buộc
-         var fullname = document.getElementById('username');
-         var email = document.getElementById('email');
-         var termsCheckbox = document.getElementById('terms');
-
-         if (!fullname || !fullname.value.trim()) {
-            alert('Vui lòng nhập họ tên');
-            return;
-         }
-
-         if (!email || !email.value.trim()) {
-            alert('Vui lòng nhập email');
-            return;
-         }
-
-         if (!password || !password.value.trim()) {
-            alert('Vui lòng nhập mật khẩu');
-            return;
-         }
-
-         if (termsCheckbox && !termsCheckbox.checked) {
-            alert('Vui lòng đồng ý với điều khoản sử dụng');
-            return;
-         }
-
-         // Hiển thị loading
-         var submitBtn = registerForm.querySelector('button[type="submit"]');
-         var originalBtnText = submitBtn.innerHTML;
-         submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Đang xử lý...';
-         submitBtn.disabled = true;
-
-         // Giả lập đăng ký thành công sau 1.5 giây
-         setTimeout(function () {
-            // Đóng modal đăng ký
-            registerModal.style.display = 'none';
-
-            // Lưu thông tin người dùng vào session (giả lập)
-            // Trong thực tế, đây sẽ là phản hồi từ máy chủ
-            var username = fullname.value;
-
-            // Hiển thị thông báo đăng ký thành công
-            alert('Đăng ký thành công! Chào mừng ' + username);
-
-            // Tải lại trang với thông tin người dùng mới
-            window.location.href = 'index.php?register_success=true&username=' + encodeURIComponent(username);
-         }, 1500);
       });
+   }
+
+   if (confirmPassword) {
+      confirmPassword.addEventListener('input', checkPasswordMatch);
+   }
+
+   // Function to show register error messages
+   function showRegisterError(message) {
+      if (registerErrorMessage && registerErrorArea) {
+         registerErrorMessage.textContent = message;
+         registerErrorArea.style.display = 'block';
+
+         // Scroll to the error message
+         registerErrorArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+   }
+
+   // Kiểm tra độ dài mật khẩu khi trang được tải
+   if (password) {
+      setTimeout(checkPasswordLength, 300);
    }
 
    // Chức năng bật tắt hiển thị mật khẩu
@@ -375,48 +373,110 @@ document.addEventListener('DOMContentLoaded', function () {
    });
 
    // Xử lý form đăng nhập
-   var loginForm = document.querySelector('#loginModal form');
+   var loginForm = document.getElementById('loginForm');
+   var loginErrorArea = document.getElementById('loginErrorArea');
+   var loginErrorMessage = document.getElementById('loginErrorMessage');
+
    if (loginForm) {
       loginForm.addEventListener('submit', function (e) {
-         e.preventDefault();
+         e.preventDefault(); // Prevent normal form submission
 
          // Kiểm tra các trường bắt buộc
          var email = document.getElementById('loginEmail');
          var password = document.getElementById('loginPassword');
 
+         // Hide any previous error messages
+         loginErrorArea.style.display = 'none';
+
          if (!email || !email.value.trim()) {
-            alert('Vui lòng nhập email hoặc tên đăng nhập');
-            return;
+            showLoginError('Vui lòng nhập email hoặc tên đăng nhập');
+            email.focus();
+            return false;
          }
 
          if (!password || !password.value.trim()) {
-            alert('Vui lòng nhập mật khẩu');
-            return;
+            showLoginError('Vui lòng nhập mật khẩu');
+            password.focus();
+            return false;
          }
 
          // Hiển thị loading
-         var submitBtn = loginForm.querySelector('button[type="submit"]');
-         var originalBtnText = submitBtn.innerHTML;
-         submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Đang xử lý...';
+         var submitBtn = loginForm.querySelector('input[type="submit"]');
+         var originalBtnValue = submitBtn.value;
+         submitBtn.value = 'Đang xử lý...';
          submitBtn.disabled = true;
 
-         // Giả lập đăng nhập thành công sau 1.5 giây
-         setTimeout(function () {
-            // Đóng modal đăng nhập
-            loginModal.style.display = 'none';
+         // Submit form using AJAX
+         var formData = new FormData(loginForm);
 
-            // Lưu thông tin người dùng vào session (giả lập)
-            // Trong thực tế, đây sẽ là phản hồi từ máy chủ
-            var username = email.value;
+         // Create XMLHttpRequest object
+         var xhr = new XMLHttpRequest();
+         xhr.open('POST', loginForm.action, true);
+         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
-            // Hiển thị thông báo đăng nhập thành công
-            alert('Đăng nhập thành công! Chào mừng trở lại, ' + username);
+         xhr.onload = function () {
+            if (xhr.status === 200) {
+               try {
+                  var response = JSON.parse(xhr.responseText);
 
-            // Tải lại trang với thông tin người dùng mới
-            window.location.href = 'index.php?login_success=true&username=' + encodeURIComponent(username);
-         }, 1500);
+                  if (response.success) {
+                     // Login successful - redirect to home page
+                     window.location.href = '/Admin/index.php';
+                  } else {
+                     // Login failed - show error message
+                     showLoginError(response.error || 'Lỗi đăng nhập không xác định');
+                     submitBtn.value = originalBtnValue;
+                     submitBtn.disabled = false;
+                  }
+               } catch (e) {
+                  // JSON parse error
+                  showLoginError('Lỗi xử lý phản hồi từ máy chủ');
+                  submitBtn.value = originalBtnValue;
+                  submitBtn.disabled = false;
+               }
+            } else {
+               // HTTP error
+               showLoginError('Lỗi kết nối đến máy chủ');
+               submitBtn.value = originalBtnValue;
+               submitBtn.disabled = false;
+            }
+         };
+
+         xhr.onerror = function () {
+            // Network error
+            showLoginError('Lỗi kết nối mạng');
+            submitBtn.value = originalBtnValue;
+            submitBtn.disabled = false;
+         };
+
+         // Send the form data
+         xhr.send(formData);
+         return false;
       });
    }
+
+   // Function to show login error messages
+   function showLoginError(message) {
+      if (loginErrorMessage && loginErrorArea) {
+         loginErrorMessage.textContent = message;
+         loginErrorArea.style.display = 'block';
+
+         // Scroll to the error message
+         loginErrorArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+   }
+
+   // Check for login_error parameter in URL and show the login modal with error
+   function checkForLoginError() {
+      var urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('login_error') && loginModal) {
+         loginModal.style.display = 'block';
+         showLoginError(urlParams.get('error_message') || 'Tên đăng nhập hoặc mật khẩu không chính xác');
+      }
+   }
+
+   // Run the check when page loads
+   checkForLoginError();
 
    // Xử lý dropdown người dùng
    const userDropdownToggle = document.querySelector('.user-dropdown-toggle');
@@ -426,12 +486,38 @@ document.addEventListener('DOMContentLoaded', function () {
       const dropdownMenu = userDropdown.querySelector('.user-dropdown-menu');
       console.log('Dropdown elements found:', userDropdownToggle, dropdownMenu);
 
+      // Thêm hiệu ứng ripple khi click
+      function createRippleEffect(event) {
+         const button = event.currentTarget;
+         const ripple = document.createElement('span');
+         const rect = button.getBoundingClientRect();
+
+         const size = Math.max(rect.width, rect.height);
+         const x = event.clientX - rect.left - size / 2;
+         const y = event.clientY - rect.top - size / 2;
+
+         ripple.className = 'ripple';
+         ripple.style.width = ripple.style.height = `${size}px`;
+         ripple.style.left = `${x}px`;
+         ripple.style.top = `${y}px`;
+
+         button.appendChild(ripple);
+
+         // Xóa ripple sau khi animation kết thúc
+         setTimeout(() => {
+            ripple.remove();
+         }, 600);
+      }
+
       // Toggle dropdown when clicking the button
       userDropdownToggle.addEventListener('click', function (e) {
          e.preventDefault();
          e.stopPropagation();
 
          console.log('Dropdown toggle clicked');
+
+         // Tạo hiệu ứng ripple
+         createRippleEffect(e);
 
          // Toggle show class for dropdown visibility
          dropdownMenu.classList.toggle('show');
@@ -442,14 +528,14 @@ document.addEventListener('DOMContentLoaded', function () {
             dropdownMenu.style.display = 'block';
             dropdownMenu.style.visibility = 'visible';
             dropdownMenu.style.opacity = '1';
-            dropdownMenu.style.transform = 'translateY(0)';
+            dropdownMenu.style.transform = 'translateY(0) scale(1)';
             dropdownMenu.style.pointerEvents = 'auto';
          } else {
             setTimeout(function () {
                dropdownMenu.style.display = 'none';
                dropdownMenu.style.visibility = 'hidden';
                dropdownMenu.style.opacity = '0';
-               dropdownMenu.style.transform = 'translateY(-10px)';
+               dropdownMenu.style.transform = 'translateY(-10px) scale(0.98)';
                dropdownMenu.style.pointerEvents = 'none';
             }, 200);
          }
@@ -474,16 +560,44 @@ document.addEventListener('DOMContentLoaded', function () {
       // Handle logout button click
       const logoutBtn = document.getElementById('logoutBtn');
       if (logoutBtn) {
+         // Thêm hiệu ứng ripple cho nút đăng xuất
          logoutBtn.addEventListener('click', function (e) {
             e.preventDefault();
+            e.stopPropagation();
 
-            // Show loading state
-            this.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Đang đăng xuất...';
+            // Tạo hiệu ứng ripple
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
 
-            // Redirect after a short delay
-            setTimeout(function () {
-               window.location.href = 'index.php?logout=true';
-            }, 1000);
+            const size = Math.max(rect.width, rect.height) * 2;
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+
+            ripple.className = 'ripple';
+            ripple.style.width = ripple.style.height = `${size}px`;
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+            ripple.style.backgroundColor = 'rgba(244, 67, 54, 0.2)';
+
+            this.appendChild(ripple);
+
+            // Lưu nội dung ban đầu
+            const originalContent = this.innerHTML;
+
+            // Show loading state sau một khoảng thời gian ngắn
+            setTimeout(() => {
+               this.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Đang đăng xuất...';
+
+               // Redirect after a short delay
+               setTimeout(() => {
+                  window.location.href = 'index.php?logout=true';
+               }, 800);
+            }, 300);
+
+            // Xóa ripple sau khi animation kết thúc
+            setTimeout(() => {
+               ripple.remove();
+            }, 600);
          });
       }
    } else {

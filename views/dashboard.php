@@ -1,7 +1,7 @@
 ﻿
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-<?php include 'head.php' ?>
+<head><?php include 'head.php' ?></head>
 
 <body>
     <div id="wrapper">

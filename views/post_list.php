@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+   <?php
+   include 'head.php';
+   ?>
+</head>
 <?php
-include 'head.php';
 require_once '../models/userModel.php';
 ?>
 
