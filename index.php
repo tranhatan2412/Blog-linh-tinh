@@ -30,270 +30,13 @@ if (isset($_GET['login_success']) && $_GET['login_success'] == 'true' && isset($
   <link rel="stylesheet" href="assets/css/font-awesome.css">
   <script type="text/javascript" src="assets/js/cufon-yui.js"></script>
   <script type="text/javascript" src="assets/js/font.font.js"></script>
-  <script type="text/javascript">
+  <script type="text/javascript" src="assets/js/main.js"></script>
+  <script>
     Cufon.replace('h1, h2, h3, h4, h5, h6', {
       hover: true
     });
   </script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <style>
-    /* CSS cho form đăng nhập và đăng ký */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-
-    .modal-content {
-      background-color: #fff;
-      margin: 10% auto;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      width: 400px;
-      max-width: 90%;
-      position: relative;
-    }
-
-    .close {
-      position: absolute;
-      right: 15px;
-      top: 10px;
-      font-size: 24px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .form-title {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #333;
-      font-size: 24px;
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-
-    .form-control {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-
-    .btn-submit {
-      width: 100%;
-      padding: 10px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: 10px;
-    }
-
-    .btn-submit:hover {
-      background-color: #45a049;
-    }
-
-    .form-footer {
-      text-align: center;
-      margin-top: 15px;
-      font-size: 14px;
-    }
-
-    .form-footer a {
-      color: #4CAF50;
-      text-decoration: none;
-    }
-
-    .form-footer a:hover {
-      text-decoration: underline;
-    }
-
-    /* CSS cho dropdown người dùng */
-    .user-dropdown {
-      position: relative;
-      display: inline-block;
-    }
-
-    .user-dropdown-toggle {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      padding: 8px 15px;
-      border-radius: 4px;
-      transition: all 0.3s ease;
-      background-color: rgba(255, 255, 255, 0.1);
-      color: #fff;
-    }
-
-    .user-dropdown-toggle:hover {
-      background-color: rgba(255, 255, 255, 0.2);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .user-dropdown-toggle i.fa-user {
-      margin-right: 8px;
-      font-size: 16px;
-      color: #FFD700;
-    }
-
-    .user-dropdown-toggle i.fa-caret-down {
-      margin-left: 8px;
-      transition: transform 0.3s ease;
-    }
-
-    .user-dropdown.active .user-dropdown-toggle i.fa-caret-down {
-      transform: rotate(180deg);
-    }
-
-    .user-dropdown-menu {
-      display: none;
-      position: absolute;
-      right: 0;
-      top: 100%;
-      background-color: #fff;
-      min-width: 220px;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-      z-index: 1000;
-      border-radius: 8px;
-      overflow: hidden;
-      margin-top: 10px;
-      transform-origin: top center;
-      transform: translateY(-10px);
-      opacity: 0;
-      transition: all 0.3s ease;
-      visibility: hidden;
-      /* Thuộc tính kiểm soát hiển thị */
-      pointer-events: none;
-      /* Vô hiệu hóa sự kiện khi ẩn */
-    }
-
-    .user-dropdown-menu:before {
-      content: '';
-      position: absolute;
-      top: -8px;
-      right: 20px;
-      width: 16px;
-      height: 16px;
-      background-color: #fff;
-      transform: rotate(45deg);
-      border-top-left-radius: 4px;
-      box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.05);
-    }
-
-    .user-dropdown-menu a {
-      color: #333 !important;
-      padding: 14px 20px;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      transition: all 0.3s ease;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-      font-weight: 500;
-    }
-
-    .user-dropdown-menu a:last-child {
-      border-bottom: none;
-    }
-
-    .user-dropdown-menu a:hover {
-      background-color: #f8f9fa;
-      padding-left: 25px;
-      color: #007bff !important;
-    }
-
-    .user-dropdown-menu a i {
-      margin-right: 12px;
-      width: 20px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      color: #555;
-      transition: all 0.3s ease;
-    }
-
-    .user-dropdown-menu a:hover i {
-      color: #007bff;
-      transform: scale(1.1);
-    }
-
-    .user-dropdown-menu a.logout-link {
-      background-color: #f8f8f8;
-    }
-
-    .user-dropdown-menu a.logout-link:hover {
-      background-color: #ffebee;
-      color: #f44336 !important;
-    }
-
-    .user-dropdown-menu a.logout-link:hover i {
-      color: #f44336;
-    }
-
-    .user-dropdown-menu.show {
-      display: block !important;
-      transform: translateY(0);
-      opacity: 1;
-      visibility: visible !important;
-      pointer-events: auto !important;
-      /* Cho phép tương tác khi hiển thị */
-    }
-
-    /* Badge thông báo */
-    .notification-badge {
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      background-color: #f44336;
-      color: white;
-      border-radius: 50%;
-      width: 18px;
-      height: 18px;
-      font-size: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Animation cho dropdown */
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Đã kết hợp với định nghĩa ở trên */
-    /* .user-dropdown-menu.show {
-      animation: fadeIn 0.3s ease forwards;
-    } */
-  </style>
 </head>
 
 <body>
@@ -302,7 +45,7 @@ if (isset($_GET['login_success']) && $_GET['login_success'] == 'true' && isset($
     <div id="header" class="box">
       <h1 id="logo">Blog<span>LinhTinh</span> <i class="fa fa-pencil" aria-hidden="true"></i></h1>
       <ul id="nav">
-        <li class="current"><a href="index.html"><i class="fa fa-home" aria-hidden="true"></i> Trang chủ</a></li>
+        <li class="current"><a href="index.php"><i class="fa fa-home" aria-hidden="true"></i> Trang chủ</a></li>
         <li><a href="subpage.html"><i class="fa fa-envelope" aria-hidden="true"></i> Liên hệ</a></li>
         <li><a href="#"><i class="fa fa-info-circle" aria-hidden="true"></i> Giới thiệu</a></li>
         <?php
@@ -333,6 +76,47 @@ if (isset($_GET['login_success']) && $_GET['login_success'] == 'true' && isset($
         ?>
       </ul>
     </div>
+    <form action="#" method="get" id="search">
+          <h3><i class="fa fa-filter"></i> Bộ lọc tìm kiếm</h3>
+          <div class="filter-box modern-filter">
+            <div class="search-row">
+              <div class="input-with-icon">
+                <i class="fa fa-user"></i>
+                <input type="text" class="input-text" placeholder="Tìm theo tên tác giả..." />
+              </div>
+              
+              <div class="input-with-icon">
+                <i class="fa fa-book"></i>
+                <input type="text" class="input-text" placeholder="Tìm theo tiêu đề..." />
+              </div>
+              
+              <div class="filter-item">
+                <div class="dropdown-check-list" id="categoryDropdown">
+                  <span class="anchor"><i class="fa fa-tags"></i> Chọn thể loại <span class="category-count">0</span></span>
+                  <ul class="items">
+                    <li><input type="checkbox" id="cat1" name="category[]" value="1" /><label for="cat1">Tin tức</label></li>
+                    <li><input type="checkbox" id="cat2" name="category[]" value="2" /><label for="cat2">Công nghệ</label></li>
+                    <li><input type="checkbox" id="cat3" name="category[]" value="3" /><label for="cat3">Giải trí</label></li>
+                    <li><input type="checkbox" id="cat4" name="category[]" value="4" /><label for="cat4">Thể thao</label></li>
+                    <li><input type="checkbox" id="cat5" name="category[]" value="5" /><label for="cat5">Đời sống</label></li>
+                    <li class="clear-all"><button type="button" id="clearAllBtn">Xóa tất cả</button></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <div class="active-filters">
+              <div class="filter-count">Bộ lọc đang áp dụng: <span>0</span></div>
+              <div class="filter-tags"></div>
+            </div>
+            
+            <div class="submit-buttons">
+              <button type="submit" class="btn-search" name="search"><i class="fa fa-search"></i> Tìm kiếm</button>
+              <button type="button" class="btn-reset"><i class="fa fa-refresh"></i> Đặt lại</button>
+            </div>
+
+          </div>
+        </form>
     <div id="section" class="box">
       <div id="content">
         <ul class="articles box">
@@ -416,123 +200,8 @@ if (isset($_GET['login_success']) && $_GET['login_success'] == 'true' && isset($
         </div>
       </div>
       <div id="aside">
-        <form action="#" method="get" id="search">
-          <h3><i class="fa fa-filter"></i> Bộ lọc tìm kiếm</h3>
-          <div class="filter-box">
+        
 
-            <input type="text" size="28" class="input-text" placeholder="Tìm theo tên tác giả hoặc tiêu đề..." />
-
-            <div class="category-filter">
-              <div class="dropdown-check-list">
-                <span class="anchor">Chọn thể loại</span>
-                <ul class="items">
-                  <li><input type="checkbox" id="cat1" name="category[]" value="1" /><label for="cat1">Tin tức</label>
-                  </li>
-                  <li><input type="checkbox" id="cat2" name="category[]" value="2" /><label for="cat2">Công nghệ</label>
-                  </li>
-                  <li><input type="checkbox" id="cat3" name="category[]" value="3" /><label for="cat3">Giải trí</label>
-                  </li>
-                  <li><input type="checkbox" id="cat4" name="category[]" value="4" /><label for="cat4">Thể thao</label>
-                  </li>
-                  <li><input type="checkbox" id="cat5" name="category[]" value="5" /><label for="cat5">Đời sống</label>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <input type="submit" value="Tìm kiếm" class="input-submit" name="search" />
-
-          </div>
-        </form>
-        <style>
-          .filter-box {
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-          }
-
-          .category-filter {
-            margin: 10px 0;
-          }
-
-          .category-filter h4 {
-            margin: 5px 0;
-            font-size: 14px;
-          }
-
-          .dropdown-check-list {
-            display: inline-block;
-            width: 90%;
-          }
-
-          .dropdown-check-list .anchor {
-            position: relative;
-            cursor: pointer;
-            display: inline-block;
-            padding: 5px 10px;
-            border: 1px solid #ccc;
-            width: 100%;
-            background: #fff;
-            margin-bottom: 5px;
-          }
-
-          .dropdown-check-list .anchor:after {
-            position: absolute;
-            content: "";
-            border-left: 5px solid transparent;
-            border-right: 5px solid transparent;
-            border-top: 5px solid #000;
-            right: 10px;
-            top: 45%;
-          }
-
-          .dropdown-check-list .items {
-            display: none;
-            border: 1px solid #ccc;
-            border-top: none;
-            position: absolute;
-            z-index: 1;
-            background: #fff;
-            width: 15%;
-            max-height: 200px;
-            overflow-y: auto;
-            margin: 0;
-          }
-
-          .dropdown-check-list .items li {
-            list-style: none;
-            padding: 5px;
-            margin: 0;
-          }
-
-          .dropdown-check-list .items li label {
-            display: inline-block;
-            margin-left: 5px;
-          }
-        </style>
-        <script>
-          document.addEventListener('DOMContentLoaded', function () {
-            var checkList = document.querySelector('.dropdown-check-list');
-            var anchor = checkList.querySelector('.anchor');
-            var items = checkList.querySelector('.items');
-
-            anchor.addEventListener('click', function () {
-              if (items.style.display === 'block') {
-                items.style.display = 'none';
-              } else {
-                items.style.display = 'block';
-              }
-            });
-
-            // Đóng dropdown khi click ra ngoài
-            document.addEventListener('click', function (e) {
-              if (!checkList.contains(e.target)) {
-                items.style.display = 'none';
-              }
-            });
-          });
-        </script>
         <h3>Sidebar Menu</h3>
         <ul class="menu">
           <li><a href="#">Discussion</a></li>
@@ -643,383 +312,6 @@ if (isset($_GET['login_success']) && $_GET['login_success'] == 'true' && isset($
   <script type="text/javascript">Cufon.now();</script>
   <!-- END PAGE SOURCE -->
 
-  <script>
-    // JavaScript để điều khiển hiển thị form
-    document.addEventListener('DOMContentLoaded', function () {
-      // Lấy các phần tử modal
-      var loginModal = document.getElementById('loginModal');
-      var registerModal = document.getElementById('registerModal');
-
-      // Lấy các nút mở modal
-      var loginBtn = document.getElementById('loginBtn');
-      var registerBtn = document.getElementById('registerBtn');
-
-      // Lấy các phần tử đóng modal
-      var closeLogin = document.getElementById('closeLogin');
-      var closeRegister = document.getElementById('closeRegister');
-
-      // Lấy các nút chuyển đổi giữa đăng nhập và đăng ký
-      var switchToRegister = document.getElementById('switchToRegister');
-      var switchToLogin = document.getElementById('switchToLogin');
-
-      // Khi người dùng nhấp vào nút đăng nhập
-      loginBtn.onclick = function (e) {
-        e.preventDefault();
-        loginModal.style.display = 'block';
-      }
-
-      // Khi người dùng nhấp vào nút đăng ký
-      registerBtn.onclick = function (e) {
-        e.preventDefault();
-        registerModal.style.display = 'block';
-      }
-
-      // Khi người dùng nhấp vào nút đóng
-      closeLogin.onclick = function () {
-        loginModal.style.display = 'none';
-      }
-
-      closeRegister.onclick = function () {
-        registerModal.style.display = 'none';
-      }
-
-      // Khi người dùng nhấp vào nút chuyển đổi
-      switchToRegister.onclick = function (e) {
-        e.preventDefault();
-        loginModal.style.display = 'none';
-        registerModal.style.display = 'block';
-      }
-
-      switchToLogin.onclick = function (e) {
-        e.preventDefault();
-        registerModal.style.display = 'none';
-        loginModal.style.display = 'block';
-      }
-
-      // Khi người dùng nhấp vào bất kỳ đâu bên ngoài modal
-      window.onclick = function (event) {
-        if (event.target == loginModal) {
-          loginModal.style.display = 'none';
-        }
-        if (event.target == registerModal) {
-          registerModal.style.display = 'none';
-        }
-      }
-
-      // Kiểm tra mật khẩu khớp nhau
-      var password = document.getElementById('password');
-      var confirmPassword = document.getElementById('confirmPassword');
-      var passwordMatchMessage = document.getElementById('passwordMatchMessage');
-      var registerForm = document.querySelector('#registerModal form');
-
-      // Hàm kiểm tra mật khẩu
-      function checkPasswordMatch() {
-        if (confirmPassword.value === '') {
-          passwordMatchMessage.style.display = 'none';
-          return;
-        }
-
-        if (password.value === confirmPassword.value) {
-          passwordMatchMessage.textContent = 'Mật khẩu khớp!';
-          passwordMatchMessage.style.color = 'green';
-          passwordMatchMessage.style.display = 'block';
-          confirmPassword.setCustomValidity('');
-        } else {
-          passwordMatchMessage.textContent = 'Mật khẩu không khớp!';
-          passwordMatchMessage.style.color = 'red';
-          passwordMatchMessage.style.display = 'block';
-          confirmPassword.setCustomValidity('Mật khẩu không khớp');
-        }
-      }
-
-      // Gắn sự kiện kiểm tra khi nhập
-      password.addEventListener('input', checkPasswordMatch);
-      confirmPassword.addEventListener('input', checkPasswordMatch);
-
-      // Kiểm tra khi submit form đăng ký
-      registerForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        // Kiểm tra mật khẩu khớp nhau
-        if (password.value !== confirmPassword.value) {
-          checkPasswordMatch();
-          return;
-        }
-
-        // Kiểm tra các trường bắt buộc
-        var fullname = document.getElementById('username');
-        var email = document.getElementById('email');
-        var termsCheckbox = document.getElementById('terms');
-
-        if (!fullname.value.trim()) {
-          alert('Vui lòng nhập họ tên');
-          return;
-        }
-
-        if (!email.value.trim()) {
-          alert('Vui lòng nhập email');
-          return;
-        }
-
-        if (!password.value.trim()) {
-          alert('Vui lòng nhập mật khẩu');
-          return;
-        }
-
-        if (!termsCheckbox.checked) {
-          alert('Vui lòng đồng ý với điều khoản sử dụng');
-          return;
-        }
-
-        // Hiển thị loading
-        var submitBtn = registerForm.querySelector('button[type="submit"]');
-        var originalBtnText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Đang xử lý...';
-        submitBtn.disabled = true;
-
-        // Giả lập đăng ký thành công sau 1.5 giây
-        setTimeout(function () {
-          // Đóng modal đăng ký
-          registerModal.style.display = 'none';
-
-          // Lưu thông tin người dùng vào session (giả lập)
-          // Trong thực tế, đây sẽ là phản hồi từ máy chủ
-          var username = fullname.value;
-
-          // Hiển thị thông báo đăng ký thành công
-          alert('Đăng ký thành công! Chào mừng ' + username);
-
-          // Tải lại trang với thông tin người dùng mới
-          window.location.href = 'index.php?register_success=true&username=' + encodeURIComponent(username);
-        }, 1500);
-      })
-
-      // Chức năng bật tắt hiển thị mật khẩu
-      document.querySelectorAll('.toggle-password').forEach(function (toggle) {
-        toggle.addEventListener('click', function () {
-          const passwordField = this.previousElementSibling;
-          const type = passwordField.getAttribute('type');
-
-          if (type === 'password') {
-            passwordField.setAttribute('type', 'text');
-            this.classList.remove('fa-eye-slash');
-            this.classList.add('fa-eye');
-          } else {
-            passwordField.setAttribute('type', 'password');
-            this.classList.remove('fa-eye');
-            this.classList.add('fa-eye-slash');
-          }
-        });
-      });
-
-      // Xử lý form đăng nhập
-      var loginForm = document.querySelector('#loginModal form');
-      if (loginForm) {
-        loginForm.addEventListener('submit', function (e) {
-          e.preventDefault();
-
-          // Kiểm tra các trường bắt buộc
-          var email = document.getElementById('loginEmail');
-          var password = document.getElementById('loginPassword');
-
-          if (!email.value.trim()) {
-            alert('Vui lòng nhập email hoặc tên đăng nhập');
-            return;
-          }
-
-          if (!password.value.trim()) {
-            alert('Vui lòng nhập mật khẩu');
-            return;
-          }
-
-          // Hiển thị loading
-          var submitBtn = loginForm.querySelector('button[type="submit"]');
-          var originalBtnText = submitBtn.innerHTML;
-          submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Đang xử lý...';
-          submitBtn.disabled = true;
-
-          // Giả lập đăng nhập thành công sau 1.5 giây
-          setTimeout(function () {
-            // Đóng modal đăng nhập
-            loginModal.style.display = 'none';
-
-            // Lưu thông tin người dùng vào session (giả lập)
-            // Trong thực tế, đây sẽ là phản hồi từ máy chủ
-            var username = email.value;
-
-            // Hiển thị thông báo đăng nhập thành công
-            alert('Đăng nhập thành công! Chào mừng trở lại, ' + username);
-
-            // Tải lại trang với thông tin người dùng mới
-            window.location.href = 'index.php?login_success=true&username=' + encodeURIComponent(username);
-          }, 1500);
-        });
-      }
-
-      // Xử lý dropdown người dùng
-      $(document).ready(function () {
-        // Mở/đóng dropdown khi nhấp vào
-        $('.user-dropdown-toggle').on('click', function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-
-          var $dropdown = $(this).closest('.user-dropdown');
-          var $menu = $dropdown.find('.user-dropdown-menu');
-
-          // Đóng tất cả các dropdown khác
-          $('.user-dropdown-menu').not($menu).removeClass('show');
-          $('.user-dropdown').not($dropdown).removeClass('active');
-
-          // Mở/đóng dropdown hiện tại
-          $menu.toggleClass('show');
-          $dropdown.toggleClass('active');
-
-          // Debug
-          console.log('Dropdown clicked');
-          console.log('Show class:', $menu.hasClass('show'));
-          console.log('Display style:', $menu.css('display'));
-
-          // Đảm bảo hiển thị dropdown và xử lý các thuộc tính CSS
-          if ($menu.hasClass('show')) {
-            $menu.css({
-              'display': 'block',
-              'visibility': 'visible',
-              'pointer-events': 'auto'
-            });
-            console.log('Dropdown opened');
-          } else {
-            $menu.css({
-              'display': 'none',
-              'visibility': 'hidden',
-              'pointer-events': 'none'
-            });
-            console.log('Dropdown closed');
-          }
-
-          // Thêm hiệu ứng ripple khi nhấp vào
-          var $ripple = $('<span class="ripple"></span>');
-          var $button = $(this);
-          var buttonPos = $button.offset();
-          var xPos = e.pageX - buttonPos.left;
-          var yPos = e.pageY - buttonPos.top;
-
-          $ripple.css({
-            top: yPos,
-            left: xPos
-          }).appendTo($button);
-
-          setTimeout(function () {
-            $ripple.remove();
-          }, 600);
-        });
-
-        // Đóng dropdown khi nhấp ra ngoài
-        $(document).on('click', function (e) {
-          if (!$(e.target).closest('.user-dropdown').length) {
-            var $menu = $('.user-dropdown-menu');
-            $menu.removeClass('show');
-            $('.user-dropdown').removeClass('active');
-
-            // Đảm bảo các thuộc tính CSS được đặt lại
-            $menu.css({
-              'display': 'none',
-              'visibility': 'hidden',
-              'pointer-events': 'none'
-            });
-            console.log('Dropdown closed by outside click');
-          }
-        });
-
-        // Xử lý sự kiện đăng xuất
-        $('#logoutBtn').on('click', function (e) {
-          e.preventDefault();
-
-          // Hiển thị loading
-          var $logoutBtn = $(this);
-          var originalText = $logoutBtn.html();
-          $logoutBtn.html('<i class="fa fa-spinner fa-spin"></i> Đang đăng xuất...');
-
-          // Giả lập đăng xuất sau 1 giây
-          setTimeout(function () {
-            // Chuyển hướng đến trang đăng xuất
-            window.location.href = 'index.php?logout=true';
-          }, 1000);
-        });
-
-        // Thêm hiệu ứng hover cho các mục trong dropdown
-        $('.user-dropdown-menu a').on('mouseenter', function () {
-          $(this).find('i').addClass('pulse');
-        }).on('mouseleave', function () {
-          $(this).find('i').removeClass('pulse');
-        });
-
-        // Xử lý đăng xuất
-        $('#logoutBtn').on('click', function (e) {
-          e.preventDefault();
-
-          // Hiển thị hiệu ứng loading
-          var $button = $(this);
-          $button.html('<i class="fa fa-spinner fa-spin"></i> Đang đăng xuất...');
-
-          // Giả lập đăng xuất sau 1 giây
-          setTimeout(function () {
-            // Chuyển hướng đến trang đăng xuất hoặc trang chủ
-            window.location.href = 'index.php?logout=true';
-          }, 1000);
-        });
-      });
-    });
-  </script>
-
-  <style>
-    /* CSS bổ sung cho hiệu ứng */
-    .ripple {
-      position: absolute;
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 50%;
-      transform: scale(0);
-      width: 100px;
-      height: 100px;
-      pointer-events: none;
-      animation: ripple-effect 0.6s linear;
-    }
-
-    @keyframes ripple-effect {
-      to {
-        transform: scale(2.5);
-        opacity: 0;
-      }
-    }
-
-    .pulse {
-      animation: pulse 0.5s infinite alternate;
-    }
-
-    @keyframes pulse {
-      from {
-        transform: scale(1);
-      }
-
-      to {
-        transform: scale(1.2);
-      }
-    }
-
-    /* Hiệu ứng loading */
-    .fa-spin {
-      animation: fa-spin 1s infinite linear;
-    }
-
-    @keyframes fa-spin {
-      0% {
-        transform: rotate(0deg);
-      }
-
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-  </style>
 
   <?php
   if (isset($_SESSION["error"])) {

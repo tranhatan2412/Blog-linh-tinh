@@ -142,11 +142,12 @@ img.f-right {
 #header {
 	position: relative;
 	height: 140px;
-	overflow: hidden;
+	overflow: visible;
 	background: linear-gradient(135deg, #3498db, #2c3e50);
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 	border-radius: 0 0 8px 8px;
 	margin-bottom: 20px;
+	z-index: 100;
 }
 
 #header #logo {
@@ -176,6 +177,8 @@ img.f-right {
 	font-size: 110%;
 	display: flex;
 	gap: 5px;
+	overflow: visible;
+	z-index: 200;
 }
 
 #header #nav li {
@@ -420,4 +423,596 @@ img.f-right {
 
 .input-submit {
 	padding: 3px;
+}
+
+/* CSS cho form đăng nhập và đăng ký */
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+	background-color: #fff;
+	margin: 10% auto;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	width: 400px;
+	max-width: 90%;
+	position: relative;
+}
+
+.close {
+	position: absolute;
+	right: 15px;
+	top: 10px;
+	font-size: 24px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.form-title {
+	text-align: center;
+	margin-bottom: 20px;
+	color: #333;
+	font-size: 24px;
+}
+
+.form-group {
+	margin-bottom: 15px;
+}
+
+.form-group label {
+	display: block;
+	margin-bottom: 5px;
+	font-weight: bold;
+}
+
+.form-control {
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+.btn-submit {
+	width: 100%;
+	padding: 10px;
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 16px;
+	margin-top: 10px;
+}
+
+.btn-submit:hover {
+	background-color: #45a049;
+}
+
+.form-footer {
+	text-align: center;
+	margin-top: 15px;
+	font-size: 14px;
+}
+
+.form-footer a {
+	color: #4CAF50;
+	text-decoration: none;
+}
+
+.form-footer a:hover {
+	text-decoration: underline;
+}
+
+/* CSS cho dropdown người dùng */
+.user-dropdown {
+	position: relative;
+	display: inline-block;
+}
+
+.user-dropdown-toggle {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	padding: 8px 15px;
+	border-radius: 4px;
+	transition: all 0.3s ease;
+	background-color: rgba(255, 255, 255, 0.1);
+	color: #fff;
+}
+
+.user-dropdown-toggle:hover {
+	background-color: rgba(255, 255, 255, 0.2);
+	transform: translateY(-2px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.user-dropdown-toggle i.fa-user {
+	margin-right: 8px;
+	font-size: 16px;
+	color: #FFD700;
+}
+
+.user-dropdown-toggle i.fa-caret-down {
+	margin-left: 8px;
+	transition: transform 0.3s ease;
+}
+
+.user-dropdown.active .user-dropdown-toggle i.fa-caret-down {
+	transform: rotate(180deg);
+}
+
+.user-dropdown-menu {
+	display: none;
+	position: absolute;
+	right: 0;
+	top: 100%;
+	background-color: #fff;
+	min-width: 220px;
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+	z-index: 9999;
+	/* Tăng z-index để đảm bảo hiển thị trên các phần tử khác */
+	border-radius: 8px;
+	overflow: hidden;
+	margin-top: 10px;
+	transform-origin: top center;
+	transform: translateY(-10px);
+	opacity: 0;
+	transition: transform 0.2s ease, opacity 0.2s ease, visibility 0.2s ease;
+	visibility: hidden;
+	/* Thuộc tính kiểm soát hiển thị */
+	pointer-events: none;
+	/* Vô hiệu hóa sự kiện khi ẩn */
+}
+
+.user-dropdown-menu:before {
+	content: '';
+	position: absolute;
+	top: -8px;
+	right: 20px;
+	width: 16px;
+	height: 16px;
+	background-color: #fff;
+	transform: rotate(45deg);
+	border-top-left-radius: 4px;
+	box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.user-dropdown-menu a {
+	color: #333 !important;
+	padding: 14px 20px;
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	transition: all 0.3s ease;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+	font-weight: 500;
+}
+
+.user-dropdown-menu a:last-child {
+	border-bottom: none;
+}
+
+.user-dropdown-menu a:hover {
+	background-color: #f8f9fa;
+	padding-left: 25px;
+	color: #007bff !important;
+}
+
+.user-dropdown-menu a i {
+	margin-right: 12px;
+	width: 20px;
+	height: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 16px;
+	color: #555;
+	transition: all 0.3s ease;
+}
+
+.user-dropdown-menu a:hover i {
+	color: #007bff;
+	transform: scale(1.1);
+}
+
+.user-dropdown-menu a.logout-link {
+	background-color: #f8f8f8;
+}
+
+.user-dropdown-menu a.logout-link:hover {
+	background-color: #ffebee;
+	color: #f44336 !important;
+}
+
+.user-dropdown-menu a.logout-link:hover i {
+	color: #f44336;
+}
+
+.user-dropdown-menu.show {
+	display: block !important;
+	transform: translateY(0) !important;
+	opacity: 1 !important;
+	visibility: visible !important;
+	pointer-events: auto !important;
+	/* Make sure no other settings override these */
+	position: absolute !important;
+	z-index: 10000 !important;
+}
+
+/* Badge thông báo */
+.notification-badge {
+	position: absolute;
+	top: -5px;
+	right: -5px;
+	background-color: #f44336;
+	color: white;
+	border-radius: 50%;
+	width: 18px;
+	height: 18px;
+	font-size: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: bold;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Animation cho dropdown */
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.filter-box {
+	background: #f8f9fa;
+	padding: 20px;
+	border-radius: 8px;
+	margin-bottom: 20px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.modern-filter {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+
+.search-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 15px;
+	align-items: center;
+}
+
+.input-with-icon {
+	position: relative;
+	flex: 1;
+	min-width: 200px;
+}
+
+.input-with-icon i {
+	position: absolute;
+	left: 10px;
+	top: 50%;
+	transform: translateY(-50%);
+	color: #6c757d;
+}
+
+.input-with-icon .input-text {
+	padding-left: 35px;
+	width: 100%;
+}
+
+.input-text {
+	padding: 10px 15px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	transition: all 0.3s ease;
+	box-sizing: border-box;
+}
+
+.input-text:focus {
+	border-color: #4a90e2;
+	box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+	outline: none;
+}
+
+.filter-item {
+	flex: 1;
+	min-width: 200px;
+}
+
+.dropdown-check-list {
+	display: block;
+	width: 100%;
+	position: relative;
+}
+
+.dropdown-check-list .anchor {
+	position: relative;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	padding: 10px 15px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	background: #fff;
+	transition: all 0.3s ease;
+}
+
+.dropdown-check-list .anchor:hover {
+	border-color: #4a90e2;
+}
+
+.dropdown-check-list .anchor i {
+	margin-right: 8px;
+	color: #6c757d;
+}
+
+.dropdown-check-list .anchor:after {
+	position: absolute;
+	content: "";
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-top: 5px solid #6c757d;
+	right: 15px;
+	top: 50%;
+	transform: translateY(-50%);
+	transition: transform 0.3s ease;
+}
+
+.dropdown-check-list.active .anchor:after {
+	transform: translateY(-50%) rotate(180deg);
+}
+
+.category-count {
+	background: #e9ecef;
+	color: #495057;
+	border-radius: 50%;
+	padding: 2px 6px;
+	font-size: 12px;
+	margin-left: 5px;
+}
+
+.dropdown-check-list .items {
+	display: none;
+	border: 1px solid #ddd;
+	border-radius: 0 0 4px 4px;
+	position: absolute;
+	z-index: 10;
+	background: #fff;
+	width: 100%;
+	max-height: 260px;
+	overflow-y: auto;
+	margin: 0;
+	padding: 0;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	top: 100%;
+	left: 0;
+	opacity: 0;
+	transform: translateY(-10px);
+	transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.dropdown-check-list.active .items {
+	display: block;
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.dropdown-check-list .items li {
+	list-style: none;
+	padding: 8px 15px;
+	margin: 0;
+	transition: background 0.2s ease;
+}
+
+.dropdown-check-list .items li:hover {
+	background: #f8f9fa;
+}
+
+.dropdown-check-list .items li label {
+	display: inline-block;
+	margin-left: 8px;
+	cursor: pointer;
+}
+
+.dropdown-check-list .items li.clear-all {
+	border-top: 1px solid #ddd;
+	padding: 10px 15px;
+}
+
+.dropdown-check-list .items li.clear-all button {
+	background: none;
+	border: none;
+	color: #dc3545;
+	cursor: pointer;
+	padding: 0;
+	font-size: 14px;
+}
+
+.dropdown-check-list .items li.clear-all button:hover {
+	text-decoration: underline;
+}
+
+.active-filters {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px;
+}
+
+.filter-count {
+	font-size: 14px;
+	color: #6c757d;
+}
+
+.filter-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.filter-tag {
+	display: inline-flex;
+	align-items: center;
+	background: #e9ecef;
+	padding: 5px 10px;
+	border-radius: 20px;
+	font-size: 13px;
+	color: #495057;
+}
+
+.filter-tag .remove {
+	margin-left: 5px;
+	cursor: pointer;
+	color: #6c757d;
+	font-size: 12px;
+	transition: color 0.2s ease;
+}
+
+.filter-tag .remove:hover {
+	color: #dc3545;
+}
+
+.submit-buttons {
+	display: flex;
+	gap: 10px;
+	margin-top: 5px;
+}
+
+.btn-search,
+.btn-reset {
+	padding: 10px 20px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.3s ease;
+	font-weight: 500;
+	position: relative;
+	overflow: hidden;
+}
+
+.btn-search {
+	background: linear-gradient(135deg, #4a90e2, #3273dc);
+	color: white;
+}
+
+.btn-reset {
+	background: #f8f9fa;
+	color: #6c757d;
+	border: 1px solid #ddd;
+}
+
+.btn-search:hover {
+	background: linear-gradient(135deg, #3273dc, #2366c9);
+	box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+}
+
+.btn-reset:hover {
+	background: #e9ecef;
+}
+
+.btn-search i,
+.btn-reset i {
+	margin-right: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+	.search-row {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.filter-item,
+	.input-with-icon {
+		width: 100%;
+	}
+
+	.submit-buttons {
+		justify-content: center;
+	}
+}
+
+@media (max-width: 576px) {
+	.filter-box {
+		padding: 15px 10px;
+	}
+
+	.submit-buttons {
+		flex-direction: column;
+	}
+}
+
+/* CSS bổ sung cho hiệu ứng */
+.ripple {
+	position: absolute;
+	background: rgba(255, 255, 255, 0.3);
+	border-radius: 50%;
+	transform: scale(0);
+	pointer-events: none;
+	animation: ripple-effect 0.6s linear;
+	z-index: 1;
+}
+
+.ripple.active {
+	transform: scale(0);
+	animation: ripple-effect 0.6s linear;
+}
+
+@keyframes ripple-effect {
+	to {
+		transform: scale(2.5);
+		opacity: 0;
+	}
+}
+
+.pulse {
+	animation: pulse 0.5s infinite alternate;
+}
+
+@keyframes pulse {
+	from {
+		transform: scale(1);
+	}
+
+	to {
+		transform: scale(1.2);
+	}
+}
+
+/* Hiệu ứng loading */
+.fa-spin {
+	animation: fa-spin 1s infinite linear;
+}
+
+@keyframes fa-spin {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
 }
