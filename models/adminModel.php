@@ -1,14 +1,8 @@
 <?php
 require_once 'connect.php';
-session_start();
+require_once 'userModel.php';
 class AdminModel extends UserModel
 {
-   protected $conn;
-
-   public function __construct()
-   {
-      $this->conn = (new Connect())->connect();
-   }
 
    public function getAllCategories()
    {

@@ -3,7 +3,7 @@ require_once 'connect.php';
 session_start();
 class UserModel
 {
-   private $conn;
+   protected $conn;
 
    public function __construct()
    {

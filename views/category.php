@@ -1,10 +1,22 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-<?php include 'head.php';
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Category</title>
+    <?php
+    include 'headIndex.php';
+    include 'head.php';
+    ?>
+</head>
+<?php
 require_once '../models/adminModel.php';
 ?>
 
 <body>
+    <?php include '../utils/user-display.php'; ?>
+    <?php include 'menu.php'; ?>
     <div id="wrapper">
         <?php include 'head_top.php' ?>
         <!-- /. NAV TOP  -->
@@ -22,7 +34,7 @@ require_once '../models/adminModel.php';
                             </div>
                             <div class="panel-body">
                                 <form style="max-width: 600px; margin: 0 auto;"
-                                    action="../controllers/categoryController.php?action=add" method="post">
+                                    action="../controllers/adminController.php?action=addCategory" method="post">
                                     <div class="form-group">
                                         <label>Category Name</label>
                                         <input name="name" class="form-control" type="text" required>
@@ -68,7 +80,7 @@ require_once '../models/adminModel.php';
                                                 foreach ($categories as $row) {
                                                     ?>
                                                     <form
-                                                        action="../controllers/adminModel.php?action=updateCategory&id=<?php echo $row['id']; ?>"
+                                                        action="../controllers/adminController.php?action=updateCategory&id=<?php echo $row['id']; ?>"
                                                         method="post">
                                                         <tr>
                                                             <td style="text-align: center;"><?php echo $order++; ?></td>
@@ -91,7 +103,7 @@ require_once '../models/adminModel.php';
                                                                 <input class="btn btn-info btn-sm" type="submit" name="update"
                                                                     value="Update">
 
-                                                                <a href="../controllers/adminModel.php?action=deleteCategory&id=<?php echo $row['id']; ?>"
+                                                                <a href="../controllers/adminController.php?action=deleteCategory&id=<?php echo $row['id']; ?>"
                                                                     onclick="return confirm('Bạn có muốn xóa danh mục này không?');"
                                                                     class="btn btn-danger btn-sm">Delete</a>
                                                             </td>
@@ -122,7 +134,7 @@ require_once '../models/adminModel.php';
         echo "<script>alert('" . $_SESSION['errorInsert'] . "')</script>";
         unset($_SESSION['errorInsert']);
     }
-    
+
     ?>
 </body>
 

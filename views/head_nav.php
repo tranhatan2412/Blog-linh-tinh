@@ -33,7 +33,7 @@ $current_page = $_SERVER['REQUEST_URI'];
             </li>
             <li>
                 <a <?php echo (strpos($current_page, 'category.php') !== false) ? 'class="active-menu"' : ''; ?>
-                    href="/Admin/views/categoryAdmin.php"><i class="fa fa-desktop "></i>Category</a>
+                    href="/Admin/views/category.php"><i class="fa fa-desktop "></i>Category</a>
             </li>
         </ul>
     </div>
