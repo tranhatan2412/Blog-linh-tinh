@@ -43,7 +43,7 @@
                   <span class="notification-badge">3</span>
                </a>
 
-               <a href="/Admin/index.php?action=logout" class="logout-link" id="logoutBtn">
+               <a class="logout-link" id="logoutBtn">
                   <i class="fa fa-sign-out"></i>
                   <div class="menu-item-content">
                      <span>Đăng xuất</span>

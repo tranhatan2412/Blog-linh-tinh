@@ -1,5 +1,4 @@
 <?php
-require_once 'connect.php';
 require_once 'userModel.php';
 class AdminModel extends UserModel
 {

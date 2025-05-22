@@ -590,7 +590,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                // Redirect after a short delay
                setTimeout(() => {
-                  window.location.href = 'index.php?logout=true';
+                  window.location.href = window.location.origin + '/Admin/index.php?logout=true';
                }, 800);
             }, 300);
 
