@@ -59,7 +59,7 @@ class UserModel
    public function addPost()
    {
       $image = '/Admin/img/' . basename($_FILES['picture']['name']);
-      $sql = "INSERT INTO post (title, short_content, full_content, author, date, category, image) VALUES ('$_POST[title]', '$_POST[short_content]', '$_POST[full_content]', '$_SESSION[username]', '$_POST[date]', '$_POST[category]', '$image')";
+      $sql = "INSERT INTO post (title, short_content, full_content, author, category, image) VALUES ('$_POST[title]', '$_POST[short_content]', '$_POST[full_content]', '$_SESSION[username]', '$_POST[category]', '$image')";
       return $this->conn->query($sql);
    }
    public function updatePost()

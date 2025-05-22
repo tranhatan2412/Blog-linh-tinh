@@ -1,5 +1,9 @@
 <?php
 include '../models/adminModel.php';
+if ($_SESSION['username'] === null) {
+    header('Location: ../index.php');
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -40,7 +44,7 @@ include '../models/adminModel.php';
                                 New Post
                             </div>
                             <div class="panel-body">
-                                <form action="../controllers/postController.php?action=add" method="post"
+                                <form action="../controllers/userController.php?action=addPost" method="post"
                                     enctype="multipart/form-data" style="max-width: 600px; margin: 0 auto;">
 
                                     <div class="form-group">

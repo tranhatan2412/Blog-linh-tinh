@@ -1,11 +1,6 @@
 <?php
 session_start();
 
-if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
-  unset($_SESSION['username']);
-  header('Location: index.php');
-  exit;
-}
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -233,7 +228,8 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
         <div class="form-group">
           <label for="username">Tên đăng nhập</label>
           <input type="text" id="username" name="username" placeholder="Sử dụng làm tên tác giả đăng bài"
-            class="form-control" required>
+            class="form-control" pattern="^[a-zA-Z0-9]+$" required>
+          <small id="usernameMessage" class="form-text" >Tên đăng nhập chỉ chứa chữ cái và số</small>
         </div>
         <div class="form-group">
           <label for="email">Email</label>
@@ -271,23 +267,6 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
   <script type="text/javascript">Cufon.now();</script>
   <!-- END PAGE SOURCE -->
 
-
-  <?php
-  if (isset($_SESSION["error"])) {
-    echo '<script>alert("' . $_SESSION["error"] . '");</script>';
-    unset($_SESSION["error"]);
-  }
-
-  // Xử lý đăng xuất
-  if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
-    // Hủy session
-    session_unset();
-    session_destroy();
-
-    // Chuyển hướng về trang chủ
-    echo '<script>window.location.href = "index.php";</script>';
-    exit();
-  }
   ?>
 </body>
 

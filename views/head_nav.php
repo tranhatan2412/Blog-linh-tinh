@@ -1,5 +1,6 @@
 <?php
-$current_page = $_SERVER['REQUEST_URI'];
+// Xác định trang hiện tại
+$current_page = basename($_SERVER['PHP_SELF']);
 ?>
 <nav class="navbar-default navbar-side" role="navigation">
     <div class="sidebar-collapse">
@@ -15,25 +16,16 @@ $current_page = $_SERVER['REQUEST_URI'];
                 </div>
             </li>
             <li>
-                <a <?php echo (strpos($current_page, 'index.php') !== false) ? 'class="active-menu"' : ''; ?>
+                <a <?php echo ($current_page == 'dashboard.php') ? 'class="active-menu"' : ''; ?>
                     href="/Admin/views/dashboard.php"><i class="fa fa-dashboard "></i>Dashboard</a>
             </li>
             <li>
-                <a><i class="fa fa-desktop "></i>Content <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level collapse in">
-                    <li>
-                        <a <?php echo (strpos($current_page, 'new_post.php') !== false) ? 'class="active-menu"' : ''; ?>
-                            href="/Admin/views/new_post.php"><i class="fa fa-plus"></i>New Post</a>
-                    </li>
-                    <li>
-                        <a <?php echo (strpos($current_page, 'post_list.php') !== false) ? 'class="active-menu"' : ''; ?>
-                            href="/Admin/views/post_list.php"><i class="fa fa-list"></i>Post List</a>
-                    </li>
-                </ul>
+                <a <?php echo ($current_page == 'user-list.php') ? 'class="active-menu"' : ''; ?>
+                    href="/Admin/views/user-list.php"><i class="fa fa-users "></i>User List</a>
             </li>
             <li>
-                <a <?php echo (strpos($current_page, 'category.php') !== false) ? 'class="active-menu"' : ''; ?>
-                    href="/Admin/views/category.php"><i class="fa fa-desktop "></i>Category</a>
+                <a <?php echo ($current_page == 'category.php') ? 'class="active-menu"' : ''; ?>
+                    href="/Admin/views/category.php"><i class="fa fa-tags "></i>Category</a>
             </li>
         </ul>
     </div>

@@ -1,9 +1,24 @@
-﻿
+﻿<?php
+session_start();
+if ($_SESSION['username'] === null) {
+    header('Location: ../index.php');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head><?php include 'head.php' ?></head>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <?php include 'headIndex.php';
+    include 'head.php' ?>
+</head>
 
 <body>
+    <?php include '../utils/user-display.php';
+    include 'menu.php'; ?>
     <div id="wrapper">
         <?php include 'head_top.php' ?>
         <!-- /. NAV TOP  -->

@@ -5,9 +5,9 @@ $action = $_GET['action'];
 
 switch ($action) {
    case 'addPost':
-      $userModel->addPost();
       move_uploaded_file($_FILES['picture']['tmp_name'], '../img/' . $_FILES['picture']['name']);
-      header('Location: ../views/new_post.php');
+      $userModel->addPost();
+      header('Location: ../views/new_post.php?action=new_post');
       break;
    case 'updatePost':
       $userModel->updatePost();
