@@ -1,9 +1,9 @@
 <?php
 require_once '../models/adminModel.php';
-$action = $_GET['action'];
+$_SESSION['action'] = $_GET['action'];
 $adminModel = new AdminModel();
 
-switch ($action) {
+switch ($_SESSION['action']) {
    case 'deleteUser':
       $adminModel->deleteUser();
       header('Location: ../views/user-list.php');
@@ -20,7 +20,8 @@ switch ($action) {
       $adminModel->deleteCategory();
       header('Location: ../views/category.php#category-list');
       break;
-   case 'getUser':
+   case 'sort_username':
+   case 'getUser ':
       $adminModel->getAllUsers();
       header('Location: ../views/user-list.php');
       break;

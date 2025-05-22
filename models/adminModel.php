@@ -33,11 +33,15 @@ class AdminModel extends UserModel
       $sql = "DELETE FROM category WHERE id = '$_GET[id]'";
       return $this->conn->query($sql);
    }
-   public function getAllUsers() {
-      $sql = "SELECT * FROM user";
+   public function getAllUsers()
+   {
+      
+      $sort = ($_SESSION['action'] === 'sort_username') ? 'desc' : 'asc';
+      $sql = "SELECT user.*, count(author) as post FROM user left outer join post on user.username = post.author group by user.username order by username $sort";
       return $this->conn->query($sql);
    }
-   public function deleteUser() {
+   public function deleteUser()
+   {
       $sql = "DELETE FROM user WHERE id = '$_GET[id]'";
       return $this->conn->query($sql);
    }

@@ -26,4 +26,5 @@ alter table post add column updated date default (current_date);
 alter table user add column role varchar(10) default 'user';
 select * from user;
 select * from post;
+select * from category;
 update user set role = 'admin' where username = 'tranhatan'

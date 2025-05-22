@@ -12,13 +12,13 @@ class UserModel
    public function register()
    {
       if ($_REQUEST['action'] == 'register') {
-         $sql = "SELECT * FROM user WHERE username = '$_POST[username]'";
-         $result = $this->conn->query($sql);
+         $sql_check = "SELECT * FROM user WHERE username = '$_POST[username]'";
+         $result = $this->conn->query($sql_check);
          if ($result->num_rows > 0)
             return ['success' => false, 'error' => "Tên tài khoản đã tồn tại"];
 
-         $sql = "SELECT * FROM user WHERE email = '$_POST[email]'";
-         $result = $this->conn->query($sql);
+         $sql_check = "SELECT * FROM user WHERE email = '$_POST[email]'";
+         $result = $this->conn->query($sql_check);
          if ($result->num_rows > 0)
             return ['success' => false, 'error' => "Email đã được đăng ký"];
 
@@ -27,6 +27,7 @@ class UserModel
 
          if ($insertResult) {
             $_SESSION['username'] = $_POST['username'];
+            $_SESSION['role'] = $this->conn->query($sql_check)->fetch_assoc()['role'];
             return ['success' => true, 'username' => $_POST['username']];
          } else
             return ['success' => false, 'error' => "Lỗi khi tạo tài khoản: " . $this->conn->error];
@@ -71,6 +72,12 @@ class UserModel
    public function deletePost()
    {
       $sql = "DELETE FROM post WHERE id = '$_POST[id]'";
+      return $this->conn->query($sql);
+   }
+
+   public function updateUser($id, $username, $email)
+   {
+      $sql = "UPDATE user SET username = '$username', email = '$email' WHERE id = '$id'";
       return $this->conn->query($sql);
    }
 }

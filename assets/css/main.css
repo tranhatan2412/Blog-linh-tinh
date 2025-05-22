@@ -1238,3 +1238,18 @@ img.f-right {
 		transform: rotate(360deg);
 	}
 }
+
+.user-list th a {
+	color: inherit; /* Giữ nguyên màu chữ của thừa kế từ thẻ cha */
+	text-decoration: none; /* Bỏ gạch chân */
+}
+
+.user-list th a:hover {
+	color: inherit; /* Giữ nguyên màu chữ khi di chuột qua */
+	text-decoration: none; /* Bỏ gạch chân khi di chuột qua */
+}
+
+/* Nếu bạn muốn thêm hiệu ứng khi di chuột qua */
+.user-list th a:hover {
+	opacity: 0.8; /* Làm mờ nhẹ khi di chuột qua */
+}
