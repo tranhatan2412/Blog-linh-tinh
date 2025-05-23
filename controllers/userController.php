@@ -4,6 +4,10 @@ $userModel = new UserModel();
 $action = $_GET['action'];
 
 switch ($action) {
+   case 'getAllPosts':
+      $userModel->getAllPosts();
+      header('Location: ../views/post_list.php?username=' . $_GET['username']);
+      break;
    case 'updateUser':
       if (!empty($_FILES['avatar']['name'])) {
          move_uploaded_file($_FILES['avatar']['tmp_name'], '../avatar/' . $_FILES['avatar']['name']);

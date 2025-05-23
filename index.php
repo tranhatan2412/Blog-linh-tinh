@@ -74,7 +74,7 @@ $posts = (new UserModel())->getAllPosts();
             </div>
             
             <p><img src="<?php echo $post['image']; ?>" alt="" class="f-left" /><?php echo $post['short_content']; ?></p>
-            <p class="more"><a href="#">Read more &raquo;</a></p>
+            <p style="min-height: 30px;" class="more"><a href="#">Read more &raquo;</a></p>
           </li>
           <?php endforeach; ?>
             

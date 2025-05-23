@@ -97,7 +97,10 @@ class UserModel
    }
    public function getAllPosts()
    {
-      $sql = "SELECT * FROM post order by created desc";
+      if (isset($_GET['username']))
+         $sql = "SELECT * FROM post join user on post.author = user.username where user.username = '$_GET[username]' order by post.created desc";
+      else
+         $sql = "SELECT * FROM post order by created desc";
       return $this->conn->query($sql);
    }
 }
