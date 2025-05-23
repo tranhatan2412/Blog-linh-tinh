@@ -1,5 +1,6 @@
 <?php
 require_once 'userModel.php';
+
 class AdminModel extends UserModel
 {
 
@@ -35,8 +36,12 @@ class AdminModel extends UserModel
    }
    public function getAllUsers()
    {
-      
-      $sort = ($_SESSION['action'] === 'sort_username') ? 'desc' : 'asc';
+      $sort = "asc";
+      if ($_SESSION['action'] === 'sort_username' && $_SESSION['status_username']) {
+         $_SESSION['sort_username'] = !$_SESSION['sort_username'];
+         $sort = $_SESSION['sort_username'] ? 'asc' : 'desc';
+         $_SESSION['status_username'] = false;
+      }
       $sql = "SELECT user.*, count(author) as post FROM user left outer join post on user.username = post.author group by user.username order by username $sort";
       return $this->conn->query($sql);
    }

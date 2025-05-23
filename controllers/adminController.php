@@ -2,6 +2,11 @@
 require_once '../models/adminModel.php';
 $_SESSION['action'] = $_GET['action'];
 $adminModel = new AdminModel();
+if (!isset($_SESSION['sort_username']))
+   $_SESSION['sort_username'] = false;
+if ($_SESSION['action'] === 'sort_username') 
+   $_SESSION['status_username'] = true;
+
 
 switch ($_SESSION['action']) {
    case 'deleteUser':
