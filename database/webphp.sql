@@ -24,6 +24,11 @@ create table if not exists post(
 );
 alter table post add column updated date default (current_date);
 alter table user add column role varchar(10) default 'user';
+alter table user add column avatar varchar(255);
+alter table post modify column created datetime default now() ;
+alter table post modify column updated datetime default now();
+
+ALTER TABLE post DROP INDEX title;
 select * from user;
 select * from post;
 select * from category;

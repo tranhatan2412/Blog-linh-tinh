@@ -4,6 +4,13 @@ $userModel = new UserModel();
 $action = $_GET['action'];
 
 switch ($action) {
+   case 'updateUser':
+      if (!empty($_FILES['avatar']['name'])) {
+         move_uploaded_file($_FILES['avatar']['tmp_name'], '../avatar/' . $_FILES['avatar']['name']);
+      }
+      $userModel->updateUserProfile();
+      header('Location: ../views/userProfile.php?action=userProfile');
+      break;
    case 'addPost':
       move_uploaded_file($_FILES['picture']['tmp_name'], '../img/' . $_FILES['picture']['name']);
       $userModel->addPost();

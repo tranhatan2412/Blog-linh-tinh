@@ -349,6 +349,105 @@ document.addEventListener('DOMContentLoaded', function () {
       }
    }
 
+   // Xử lý form đăng ký
+   if (registerForm) {
+      registerForm.addEventListener('submit', function (e) {
+         e.preventDefault(); // Prevent normal form submission
+
+         // Kiểm tra các trường bắt buộc
+         var username = document.getElementById('username');
+         var email = document.getElementById('email');
+         var password = document.getElementById('password');
+         var confirmPassword = document.getElementById('confirmPassword');
+
+         // Hide any previous error messages
+         registerErrorArea.style.display = 'none';
+
+         if (!username || !username.value.trim()) {
+            showRegisterError('Vui lòng nhập tên đăng nhập');
+            username.focus();
+            return false;
+         }
+
+         if (!email || !email.value.trim()) {
+            showRegisterError('Vui lòng nhập email');
+            email.focus();
+            return false;
+         }
+
+         if (!password || !password.value.trim()) {
+            showRegisterError('Vui lòng nhập mật khẩu');
+            password.focus();
+            return false;
+         }
+
+         if (!confirmPassword || !confirmPassword.value.trim()) {
+            showRegisterError('Vui lòng xác nhận mật khẩu');
+            confirmPassword.focus();
+            return false;
+         }
+
+         if (password.value !== confirmPassword.value) {
+            showRegisterError('Mật khẩu không khớp');
+            confirmPassword.focus();
+            return false;
+         }
+
+         // Hiển thị loading
+         var submitBtn = registerForm.querySelector('input[type="submit"]');
+         var originalBtnValue = submitBtn.value;
+         submitBtn.value = 'Đang xử lý...';
+         submitBtn.disabled = true;
+
+         // Submit form using AJAX
+         var formData = new FormData(registerForm);
+
+         // Create XMLHttpRequest object
+         var xhr = new XMLHttpRequest();
+         xhr.open('POST', registerForm.action, true);
+         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+         xhr.onload = function () {
+            if (xhr.status === 200) {
+               try {
+                  var response = JSON.parse(xhr.responseText);
+
+                  if (response.success) {
+                     // Registration successful - reload page to update menu
+                     window.location.href = '/Admin/index.php';
+                  } else {
+                     // Registration failed - show error message
+                     showRegisterError(response.error || 'Lỗi đăng ký không xác định');
+                     submitBtn.value = originalBtnValue;
+                     submitBtn.disabled = false;
+                  }
+               } catch (e) {
+                  // JSON parse error
+                  showRegisterError('Lỗi xử lý phản hồi từ máy chủ');
+                  submitBtn.value = originalBtnValue;
+                  submitBtn.disabled = false;
+               }
+            } else {
+               // HTTP error
+               showRegisterError('Lỗi kết nối đến máy chủ');
+               submitBtn.value = originalBtnValue;
+               submitBtn.disabled = false;
+            }
+         };
+
+         xhr.onerror = function () {
+            // Network error
+            showRegisterError('Lỗi kết nối mạng');
+            submitBtn.value = originalBtnValue;
+            submitBtn.disabled = false;
+         };
+
+         // Send the form data
+         xhr.send(formData);
+         return false;
+      });
+   }
+
    // Kiểm tra độ dài mật khẩu khi trang được tải
    if (password) {
       setTimeout(checkPasswordLength, 300);

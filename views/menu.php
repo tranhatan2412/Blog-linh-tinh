@@ -27,26 +27,32 @@
                      </div>
                   </a>
                <?php } ?>
-               <a href="/Admin/views/userProfile.php" class="profile-link">
-                  <i class="fa fa-id-card"></i>
-                  <div class="menu-item-content">
-                     <span>Thông tin cá nhân</span>
-                     <small>Xem và cập nhật thông tin</small>
+               <a href="/Admin/views/userProfile.php?action=userProfile" class="profile-link">
+                  <div style="display: flex; align-items: center;">
+                     <img style="width: 40px; height: 40px; border-radius: 50%;" src="<?php echo $_SESSION['avatar']; ?>" alt="Avatar" class="avatar-icon">
+                     <div style="margin-left: 10px;" class="menu-item-content">
+                        <span>Thông tin cá nhân</span>
+                        <small>Xem và cập nhật thông tin</small>
+                     </div>
                   </div>
                </a>
                <a href="#" class="posts-link">
-                  <i class="fa fa-file-text"></i>
-                  <div class="menu-item-content">
-                     <span>Bài viết đã đăng</span>
-                     <small>Quản lý bài viết của bạn</small>
+                  <div style="display: flex; align-items: center;">
+                     <i class="fa fa-file-text"></i>
+                     <span  class="notification-badge">3</span>
+                     <div style="margin-left: 50px;" class="menu-item-content">
+                        <span>Bài viết đã đăng</span>
+                        <small>Quản lý bài viết của bạn</small>
+                     </div>
                   </div>
-                  <span class="notification-badge">3</span>
                </a>
 
                <a class="logout-link" id="logoutBtn">
-                  <i class="fa fa-sign-out"></i>
-                  <div class="menu-item-content">
-                     <span>Đăng xuất</span>
+                  <div style="display: flex; align-items: center;">
+                     <i class="fa fa-sign-out"></i>
+                     <div style="margin-left: 50px;" class="menu-item-content">
+                        <span>Đăng xuất</span>
+                     </div>
                   </div>
                </a>
             </div>

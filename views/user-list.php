@@ -43,12 +43,16 @@ if ($_SESSION['username'] === null) {
                                         <thead>
                                             <tr>
                                                 <th style="text-align: center; width: 5%;">Order</th>
-                                                <th style="text-align: center; width: 20%; "><a
-                                                        href="../controllers/adminController.php?action=sort_username">Username  <span
-                                                            class="fa fa-sort"></span></a></th>
+                                                <th style="text-align: center; width: 20%; "><a href="../controllers/adminController.php?action=sort_username&sort=<?php
+                                                echo (isset($_SESSION['sort_order']) && $_SESSION['sort_order'] === 'ASC') ? 'DESC' : 'ASC';
+                                                ?>">Username <span class="fa fa-sort"></span></a></th>
                                                 <th style="text-align: center; width: 25%;">Email</th>
-                                                <th style="text-align: center; width: 15%;">Created Date</th>
-                                                <th style="text-align: center; width: 5%;">Post</th>
+                                                <th style="text-align: center; width: 15%;"><a href="../controllers/adminController.php?action=sort_created&sort=<?php
+                                                echo (isset($_SESSION['sort_created']) && $_SESSION['sort_created'] === 'ASC') ? 'DESC' : 'ASC';
+                                                ?>">Created Date <span class="fa fa-sort"></span></a></th>
+                                                <th style="text-align: center; width: 5%;"><a href="../controllers/adminController.php?action=sort_post&sort=<?php
+                                                echo (isset($_SESSION['sort_post']) && $_SESSION['sort_post'] === 'ASC') ? 'DESC' : 'ASC';
+                                                ?>">Post <span class="fa fa-sort"></span></a></th>
                                                 <th style="text-align: center; width: 15%;">Action</th>
                                             </tr>
                                         </thead>
@@ -76,9 +80,10 @@ if ($_SESSION['username'] === null) {
                                                             <?php echo $row['post']; ?>
                                                         </td>
                                                         <td style="text-align: center;">
-                                                            <a href="../controllers/userController.php?action=delete&id=<?php echo $row['id']; ?>"
-                                                                onclick="return confirm('Bạn có muốn xóa người dùng này không?');"
-                                                                class="btn btn-danger btn-sm">Delete</a>
+                                                            <?php if ($row['role'] == 'user') { ?>
+                                                                <a href="../controllers/userController.php?action=delete&id=<?php echo $row['id']; ?>"
+                                                                    onclick="return confirm('Bạn có muốn xóa người dùng này không?');"
+                                                                    class="btn btn-danger btn-sm">Delete</a><?php } ?>
                                                         </td>
                                                     </tr>
                                                     <?php

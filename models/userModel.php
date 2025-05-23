@@ -21,13 +21,14 @@ class UserModel
          $result = $this->conn->query($sql_check);
          if ($result->num_rows > 0)
             return ['success' => false, 'error' => "Email đã được đăng ký"];
-
-         $sql = "INSERT INTO user (username, password, email) VALUES ('$_POST[username]', '$_POST[password]', '$_POST[email]')";
+         $avatar = '/Admin/assets/img/portfolio/b.jpg';
+         $sql = "INSERT INTO user (username, password, email, avatar) VALUES ('$_POST[username]', '$_POST[password]', '$_POST[email]', '$avatar')";
          $insertResult = $this->conn->query($sql);
 
          if ($insertResult) {
             $_SESSION['username'] = $_POST['username'];
             $_SESSION['role'] = $this->conn->query($sql_check)->fetch_assoc()['role'];
+            $_SESSION['avatar'] = $avatar;
             return ['success' => true, 'username' => $_POST['username']];
          } else
             return ['success' => false, 'error' => "Lỗi khi tạo tài khoản: " . $this->conn->error];
@@ -46,13 +47,13 @@ class UserModel
 
          $_SESSION['username'] = $user['username'];
          $_SESSION['role'] = $user['role'];
-
+         $_SESSION['avatar'] = $user['avatar'];
          return ['success' => true, 'username' => $user['username']];
       }
 
       return ['success' => false, 'error' => "Yêu cầu không hợp lệ"];
    }
-   public function getAllPosts()
+   public function getAllPostsByUser()
    {
       $sql = "SELECT * FROM post where author = '$_SESSION[username]'";
       return $this->conn->query($sql);
@@ -78,6 +79,30 @@ class UserModel
    public function updateUser($id, $username, $email)
    {
       $sql = "UPDATE user SET username = '$username', email = '$email' WHERE id = '$id'";
+      return $this->conn->query($sql);
+   }
+
+   public function getUserByUsername($username)
+   {
+      $sql = "SELECT * FROM user WHERE username = '$username'";
+      $result = $this->conn->query($sql);
+      return $result->fetch_assoc();
+   }
+
+   public function updateUserProfile()
+   {
+      $_SESSION['username'] = $_POST['username'];
+      if (!empty($_FILES['avatar']['name'])) {
+         $avatar = '/Admin/avatar/' . basename($_FILES['avatar']['name']);
+         $sql = "UPDATE user SET username = '$_POST[username]', email = '$_POST[email]', password = '$_POST[password]', avatar = '$avatar' WHERE id = '$_GET[id]'";
+      } else
+         $sql = "UPDATE user SET username = '$_POST[username]', email = '$_POST[email]', password = '$_POST[password]' WHERE id = '$_GET[id]'";
+
+      return $this->conn->query($sql);
+   }
+   public function getAllPosts()
+   {
+      $sql = "SELECT * FROM post order by created desc";
       return $this->conn->query($sql);
    }
 }
