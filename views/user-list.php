@@ -81,7 +81,7 @@ if ($_SESSION['username'] === null) {
                                                         </td>
                                                         <td style="text-align: center;">
                                                             <?php if ($row['role'] == 'user') { ?>
-                                                                <a href="../controllers/userController.php?action=delete&id=<?php echo $row['id']; ?>"
+                                                                <a href="../controllers/adminController.php?action=deleteUser&id=<?php echo $row['id']; ?>"
                                                                     onclick="return confirm('Bạn có muốn xóa người dùng này không?');"
                                                                     class="btn btn-danger btn-sm">Delete</a><?php } ?>
                                                         </td>

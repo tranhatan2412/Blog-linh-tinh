@@ -20,10 +20,12 @@
             <div class="user-dropdown-menu">
                <?php if ($_SESSION['role'] == 'admin') { ?>
                   <a href="/Admin/views/dashboard.php" class="admin-link">
-                     <i class="fa fa-dashboard"></i>
-                     <div class="menu-item-content">
-                        <span>Dashboard</span>
-                        <small>Quản trị website</small>
+                     <div style="display: flex; align-items: center;">
+                        <i class="fa fa-dashboard"></i>
+                        <div style="margin-left: 50px;" class="menu-item-content">
+                           <span>Dashboard</span>
+                           <small>Quản trị website</small>
+                        </div>
                      </div>
                   </a>
                <?php } ?>

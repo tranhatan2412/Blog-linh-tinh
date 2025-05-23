@@ -79,7 +79,7 @@ require_once '../models/userModel.php';
                                                    onblur="this.style.borderColor='transparent'; this.style.backgroundColor='transparent'">
                                              </td>
                                              <td style="text-align: center;">
-                                                <input type="date" name="date" value="<?php echo $row['date']; ?>"
+                                                <input type="date" name="date" value="<?php echo date('Y-m-d H:i', strtotime($row['date'])); ?>"
                                                    style="width: 100%; padding: 5px; box-sizing: border-box; border: 1px solid transparent; background: transparent; outline: none; text-align: center;"
                                                    onfocus="this.style.borderColor='#5bc0de'; this.style.backgroundColor='#f8f9fa'"
                                                    onblur="this.style.borderColor='transparent'; this.style.backgroundColor='transparent'">

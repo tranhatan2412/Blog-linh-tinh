@@ -76,12 +76,6 @@ class UserModel
       return $this->conn->query($sql);
    }
 
-   public function updateUser($id, $username, $email)
-   {
-      $sql = "UPDATE user SET username = '$username', email = '$email' WHERE id = '$id'";
-      return $this->conn->query($sql);
-   }
-
    public function getUserByUsername($username)
    {
       $sql = "SELECT * FROM user WHERE username = '$username'";
@@ -95,6 +89,7 @@ class UserModel
       if (!empty($_FILES['avatar']['name'])) {
          $avatar = '/Admin/avatar/' . basename($_FILES['avatar']['name']);
          $sql = "UPDATE user SET username = '$_POST[username]', email = '$_POST[email]', password = '$_POST[password]', avatar = '$avatar' WHERE id = '$_GET[id]'";
+         $_SESSION['avatar'] = $avatar;
       } else
          $sql = "UPDATE user SET username = '$_POST[username]', email = '$_POST[email]', password = '$_POST[password]' WHERE id = '$_GET[id]'";
 
