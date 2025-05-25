@@ -1,9 +1,22 @@
 <?php
 include 'models/userModel.php';
-$posts = (new UserModel())->getAllPosts();
 
+// Lấy tất cả bài viết
+$allPosts = (new UserModel())->getAllPosts()->fetch_all(MYSQLI_ASSOC);
+$totalItems = count($allPosts);
+if (isset($_SESSION['username'])) {
+  $_SESSION['totalPostsUser'] = (new UserModel())->getAllPosts($_SESSION['username'])->num_rows;
+}
 
+// Thiết lập phân trang
+$itemsPerPage = 5; // Số bài viết mỗi trang
+$totalPages = ceil($totalItems / $itemsPerPage);
+$currentPage = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+$currentPage = min($currentPage, max(1, $totalPages)); // Đảm bảo trang hiện tại không vượt quá tổng số trang
 
+// Lấy dữ liệu cho trang hiện tại
+$offset = ($currentPage - 1) * $itemsPerPage;
+$posts = array_slice($allPosts, $offset, $itemsPerPage);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -79,11 +92,43 @@ $posts = (new UserModel())->getAllPosts();
           <?php endforeach; ?>
             
         </ul>
-        <div class="pagination box">
-          <p class="f-right"> <a href="#" class="current">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a> <a
-              href="#">5</a> <a href="#">6</a> <a href="#">7</a> <a href="#">Next &raquo;</a> </p>
-          <p class="f-left">Page 1 of 13</p>
+        <?php if ($totalItems > 0): ?>
+        <div class="pagination-container">
+          <!-- Nút về đầu -->
+          <a href="?page=1" class="pagination-arrow<?php echo ($currentPage <= 1) ? ' disabled' : ''; ?>" title="Về đầu">&laquo;&laquo;</a>
+          
+          <!-- Nút lùi 5 trang -->
+          <?php $prevPage = max(1, $currentPage - 5); ?>
+          <a href="?page=<?php echo $prevPage; ?>" class="pagination-arrow<?php echo ($currentPage <= 1) ? ' disabled' : ''; ?>" title="Lùi 5 trang">&laquo;</a>
+          
+          <!-- Các số trang -->
+          <div class="pagination-numbers">
+            <?php
+            $startPage = max(1, $currentPage - 2);
+            $endPage = min($totalPages, $startPage + 4);
+            $startPage = max(1, min($startPage, $endPage - 4));
+            
+            for ($i = $startPage; $i <= $endPage; $i++) :
+            ?>
+              <a href="?page=<?php echo $i; ?>" class="<?php echo ($i == $currentPage) ? 'active' : ''; ?>"><?php echo $i; ?></a>
+            <?php endfor; ?>
+          </div>
+          
+          <!-- Nút tiến 5 trang -->
+          <?php $nextPage = min($totalPages, $currentPage + 5); ?>
+          <a href="?page=<?php echo $nextPage; ?>" class="pagination-arrow<?php echo ($currentPage >= $totalPages) ? ' disabled' : ''; ?>" title="Tiến 5 trang">&raquo;</a>
+          
+          <!-- Nút đến cuối -->
+          <a href="?page=<?php echo $totalPages; ?>" class="pagination-arrow<?php echo ($currentPage >= $totalPages) ? ' disabled' : ''; ?>" title="Đến cuối">&raquo;&raquo;</a>
+          
+          <!-- Hiển thị thông tin trang hiện tại/tổng số trang -->
+          <span style="margin-left: 15px; font-size: 14px;">
+            Trang <?php echo $currentPage; ?> / <?php echo $totalPages; ?>
+          </span>
+          
+          
         </div>
+        <?php endif; ?>
       </div>
       <div id="aside">
 

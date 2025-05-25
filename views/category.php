@@ -1,5 +1,5 @@
 ﻿<?php
-session_start();
+require_once '../models/adminModel.php';
 if ($_SESSION['username'] === null) {
     header('Location: ../index.php');
     exit();
@@ -17,9 +17,6 @@ if ($_SESSION['username'] === null) {
     include 'head.php';
     ?>
 </head>
-<?php
-require_once '../models/adminModel.php';
-?>
 
 <body>
     <?php include '../utils/user-display.php'; ?>

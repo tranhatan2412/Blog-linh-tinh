@@ -577,6 +577,99 @@ document.addEventListener('DOMContentLoaded', function () {
    // Run the check when page loads
    checkForLoginError();
 
+   // Xử lý phân trang
+   function initPagination() {
+      console.log('Initializing pagination...');
+      
+      // Tìm input nhập số trang
+      const pageInput = document.getElementById('pageInput');
+      console.log('Page input found:', !!pageInput);
+      
+      if (pageInput) {
+         // Xử lý chuyển trang khi nhấn Enter
+         pageInput.addEventListener('keydown', function(event) {
+            console.log('Key pressed on page input:', event.key);
+            if (event.key === 'Enter') {
+               event.preventDefault(); // Ngăn chặn hành vi mặc định của form
+               goToPage();
+            }
+         });
+
+         // Xử lý khi giá trị thay đổi
+         pageInput.addEventListener('input', function() {
+            const value = parseInt(this.value);
+            const max = parseInt(this.getAttribute('max'));
+            const min = parseInt(this.getAttribute('min'));
+
+            if (value > max) this.value = max;
+            if (value < min || isNaN(value)) this.value = min;
+         });
+      }
+
+      // Thêm hiệu ứng ripple cho các nút phân trang
+      const paginationButtons = document.querySelectorAll('.pagination-arrow, .pagination-numbers a');
+      console.log('Pagination buttons found:', paginationButtons.length);
+      
+      paginationButtons.forEach(button => {
+         button.addEventListener('click', function(e) {
+            if (this.classList.contains('disabled') || this.classList.contains('active')) {
+               e.preventDefault();
+               return;
+            }
+
+            // Hiệu ứng ripple
+            const ripple = document.createElement('span');
+            ripple.className = 'ripple';
+            this.appendChild(ripple);
+
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            ripple.style.width = ripple.style.height = `${size}px`;
+            ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
+            ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
+
+            setTimeout(() => {
+               ripple.remove();
+            }, 600);
+         });
+      });
+   }
+
+   // Hàm chuyển trang
+   function goToPage() {
+      console.log('goToPage function called');
+      const pageInput = document.getElementById('pageInput');
+      if (!pageInput) {
+         console.error('Page input element not found');
+         return;
+      }
+
+      const page = parseInt(pageInput.value);
+      const maxPage = parseInt(pageInput.getAttribute('max') || '1');
+      const minPage = parseInt(pageInput.getAttribute('min') || '1');
+      
+      console.log('Page values:', { page, maxPage, minPage });
+      
+      // Đảm bảo giá trị nằm trong khoảng hợp lệ
+      const validPage = Math.max(minPage, Math.min(page || minPage, maxPage));
+      console.log('Valid page:', validPage);
+      
+      // Cập nhật URL với tham số page mới
+      try {
+         const url = new URL(window.location.href);
+         url.searchParams.set('page', validPage);
+         console.log('Redirecting to:', url.toString());
+         window.location.href = url.toString();
+      } catch (error) {
+         console.error('Error updating URL:', error);
+         // Fallback nếu có lỗi
+         window.location.href = window.location.pathname + '?page=' + validPage;
+      }
+   }
+
+   // Khởi tạo phân trang khi DOM đã tải xong
+   initPagination();
+
    // Xử lý dropdown người dùng
    const userDropdownToggle = document.querySelector('.user-dropdown-toggle');
    const userDropdown = document.getElementById('userDropdown');
@@ -703,3 +796,64 @@ document.addEventListener('DOMContentLoaded', function () {
       console.error('User dropdown elements not found');
    }
 });
+
+// Image Preview Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const imageUpload = document.getElementById('imageUpload');
+    
+    if (imageUpload) {
+        imageUpload.addEventListener('change', function() {
+            previewImage(this);
+        });
+    }
+});
+
+function previewImage(input) {
+    console.log('previewImage called', input);
+    const previewContainer = input.closest('.form-group').querySelector('.image-preview-container');
+    console.log('previewContainer:', previewContainer);
+    
+    if (!previewContainer) {
+        console.error('Preview container not found');
+        return;
+    }
+    
+    const newImageContainer = previewContainer.querySelector('.new-image');
+    console.log('newImageContainer:', newImageContainer);
+    
+    if (!newImageContainer) {
+        console.error('New image container not found');
+        return;
+    }
+    
+    const preview = newImageContainer.querySelector('img');
+    console.log('preview element:', preview);
+    
+    if (!preview) {
+        console.error('Preview image element not found');
+        return;
+    }
+    
+    if (input.files && input.files[0]) {
+        console.log('File selected:', input.files[0].name);
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            console.log('File loaded');
+            preview.src = e.target.result;
+            newImageContainer.style.display = 'block';
+        }
+        
+        reader.onerror = function(e) {
+            console.error('Error loading file:', e);
+        }
+        
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        console.log('No file selected');
+        preview.src = '#';
+        newImageContainer.style.display = 'none';
+    }
+}
+
+

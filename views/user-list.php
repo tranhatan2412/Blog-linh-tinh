@@ -84,7 +84,7 @@ if ($_SESSION['username'] === null) {
                                                                 <a href="../controllers/adminController.php?action=deleteUser&id=<?php echo $row['id']; ?>"
                                                                     onclick="return confirm('Bạn có muốn xóa người dùng này không?');"
                                                                     class="btn btn-danger btn-sm">Delete</a><?php } ?>
-                                                            <a href="../controllers/userController.php?action=getAllPosts&username=<?php echo $row['username']; ?>"
+                                                            <a href="post_list.php?username=<?php echo $row['username']; ?>&from=admin"
                                                                 class="btn btn-primary btn-sm">View Posts</a>
                                                         </td>
                                                     </tr>

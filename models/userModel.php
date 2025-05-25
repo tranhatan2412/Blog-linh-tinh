@@ -58,21 +58,29 @@ class UserModel
       $sql = "SELECT * FROM post where author = '$_SESSION[username]'";
       return $this->conn->query($sql);
    }
+   public function getPostById($id)
+   {
+      $sql = "SELECT * FROM post WHERE id = '$id'";
+      return $this->conn->query($sql)->fetch_assoc();
+   }
    public function addPost()
    {
       $image = '/Admin/img/' . basename($_FILES['picture']['name']);
       $sql = "INSERT INTO post (title, short_content, full_content, author, category, image) VALUES ('$_POST[title]', '$_POST[short_content]', '$_POST[full_content]', '$_SESSION[username]', '$_POST[category]', '$image')";
       return $this->conn->query($sql);
    }
-   public function updatePost()
+   public function updatePost($id)
    {
-      $image = '/Admin/img/' . basename($_FILES['picture']['name']);
-      $sql = "UPDATE post SET title = '$_POST[title]', short_content = '$_POST[short_content]', full_content = '$_POST[full_content]', author = '$_SESSION[username]', date = '$_POST[date]', category = '$_POST[category]', image = '$image' WHERE id = '$_POST[id]'";
+      if (!empty($_FILES['picture']['name'])) {
+         $image = '/Admin/img/' . basename($_FILES['picture']['name']);
+         $sql = "UPDATE post SET title = '$_POST[title]', short_content = '$_POST[short_content]', full_content = '$_POST[full_content]', category = '$_POST[category]', image = '$image', updated = NOW() WHERE id = '$id'";
+      } else
+         $sql = "UPDATE post SET title = '$_POST[title]', short_content = '$_POST[short_content]', full_content = '$_POST[full_content]', category = '$_POST[category]', updated = NOW() WHERE id = '$id'";
       return $this->conn->query($sql);
    }
-   public function deletePost()
+   public function deletePost($id)
    {
-      $sql = "DELETE FROM post WHERE id = '$_POST[id]'";
+      $sql = "DELETE FROM post WHERE id = '$id'";
       return $this->conn->query($sql);
    }
 
@@ -95,10 +103,10 @@ class UserModel
 
       return $this->conn->query($sql);
    }
-   public function getAllPosts()
+   public function getAllPosts($username = null)
    {
-      if (isset($_GET['username']))
-         $sql = "SELECT * FROM post join user on post.author = user.username where user.username = '$_GET[username]' order by post.created desc";
+      if ($username)
+         $sql = "SELECT * FROM post where author = '$username' order by created desc";
       else
          $sql = "SELECT * FROM post order by created desc";
       return $this->conn->query($sql);

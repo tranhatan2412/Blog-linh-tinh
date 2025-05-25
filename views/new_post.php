@@ -4,6 +4,8 @@ if ($_SESSION['username'] === null) {
     header('Location: ../index.php');
     exit();
 }
+$adminModel = new AdminModel();
+
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -53,11 +55,13 @@ if ($_SESSION['username'] === null) {
                                     </div>
                                     <div class="form-group">
                                         <label>Short Content</label>
-                                        <textarea class="form-control" rows="2" name="short_content"></textarea>
+                                        <textarea class="form-control" rows="2"
+                                            name="short_content"></textarea>
                                     </div>
                                     <div class="form-group">
                                         <label>Full Content</label>
-                                        <textarea class="form-control" rows="5" name="full_content"></textarea>
+                                        <textarea class="form-control" rows="10"
+                                            name="full_content"></textarea>
                                     </div>
 
 
@@ -65,7 +69,6 @@ if ($_SESSION['username'] === null) {
                                         <label>Category</label>
                                         <select class="form-control" name="category">
                                             <?php
-                                            $adminModel = new AdminModel();
                                             $categories = $adminModel->getAllCategories();
                                             if ($categories->num_rows == 0) {
                                                 ?>
@@ -86,7 +89,7 @@ if ($_SESSION['username'] === null) {
 
                                     <div class="form-group">
                                         <label>Picture</label>
-                                        <input class="form-control" type="file" name="picture" required>
+                                        <input class="form-control" type="file" name="picture" required accept="image/*">
                                     </div>
 
                                     <div style="text-align: center;">

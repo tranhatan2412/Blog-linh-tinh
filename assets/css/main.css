@@ -1525,3 +1525,85 @@ img.f-right {
 .user-list th a:hover {
 	opacity: 0.8; /* Làm mờ nhẹ khi di chuột qua */
 }
+
+/* Pagination Styles */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+    padding: 10px 0;
+}
+
+.pagination-arrow, 
+.pagination-numbers a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.pagination-arrow {
+    background-color: #f8f9fa;
+}
+
+.pagination-arrow:hover {
+    background-color: #e9ecef;
+}
+
+.pagination-numbers {
+    display: flex;
+    gap: 5px;
+}
+
+.pagination-numbers a {
+    background-color: white;
+}
+
+.pagination-numbers a:hover,
+.pagination-numbers a.active {
+    background-color: #4CAF50;
+    color: white;
+    border-color: #4CAF50;
+}
+
+.pagination-arrow.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+    .pagination-container {
+        gap: 3px;
+    }
+    
+    .pagination-arrow, 
+    .pagination-numbers a {
+        min-width: 30px;
+        height: 30px;
+        padding: 0 8px;
+        font-size: 12px;
+    }
+
+    .pagination-goto {
+        margin-left: 10px;
+    }
+
+    .pagination-goto input {
+        width: 40px;
+    }
+}

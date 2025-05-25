@@ -4,10 +4,6 @@ $userModel = new UserModel();
 $action = $_GET['action'];
 
 switch ($action) {
-   case 'getAllPosts':
-      $userModel->getAllPosts();
-      header('Location: ../views/post_list.php?username=' . $_GET['username']);
-      break;
    case 'updateUser':
       if (!empty($_FILES['avatar']['name'])) {
          move_uploaded_file($_FILES['avatar']['tmp_name'], '../avatar/' . $_FILES['avatar']['name']);
@@ -21,12 +17,14 @@ switch ($action) {
       header('Location: ../views/new_post.php?action=new_post');
       break;
    case 'updatePost':
-      $userModel->updatePost();
-      header('Location: ../views/post_list.php');
+      if (!empty($_FILES['picture']['name']))
+         move_uploaded_file($_FILES['picture']['tmp_name'], '../img/' . $_FILES['picture']['name']);
+      $userModel->updatePost($_GET['id']);
+      header('Location: ../views/post_list.php?username=' . $_GET['username'] . '&from='.$_GET['from']);
       break;
    case 'deletePost':
-      $userModel->deletePost();
-      header('Location: ../views/post_list.php');
+      $userModel->deletePost($_GET['id']);
+      header('Location: ../views/post_list.php?username=' . $_GET['username'] . '&from='.$_GET['from']);
       break;
    case 'register':
       $isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
