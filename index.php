@@ -1,22 +1,8 @@
 <?php
-include 'models/userModel.php';
+include 'models/adminModel.php';
 
-// Lấy tất cả bài viết
-$allPosts = (new UserModel())->getAllPosts()->fetch_all(MYSQLI_ASSOC);
-$totalItems = count($allPosts);
-if (isset($_SESSION['username'])) {
-  $_SESSION['totalPostsUser'] = (new UserModel())->getAllPosts($_SESSION['username'])->num_rows;
-}
+$adminModel = new AdminModel();
 
-// Thiết lập phân trang
-$itemsPerPage = 5; // Số bài viết mỗi trang
-$totalPages = ceil($totalItems / $itemsPerPage);
-$currentPage = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
-$currentPage = min($currentPage, max(1, $totalPages)); // Đảm bảo trang hiện tại không vượt quá tổng số trang
-
-// Lấy dữ liệu cho trang hiện tại
-$offset = ($currentPage - 1) * $itemsPerPage;
-$posts = array_slice($allPosts, $offset, $itemsPerPage);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -28,34 +14,31 @@ $posts = array_slice($allPosts, $offset, $itemsPerPage);
   <div class="main">
     <?php include 'utils/user-display.php';
     include 'views/menu.php' ?>
-    <form action="#" method="get" id="search">
+    <form action="index.php" method="get" id="search">
       <h3><i class="fa fa-filter"></i> Bộ lọc tìm kiếm</h3>
       <div class="filter-box modern-filter">
         <div class="search-row">
           <div class="input-with-icon">
             <i class="fa fa-user"></i>
-            <input type="text" class="input-text" placeholder="Tìm theo tên tác giả..." />
+            <input type="text" name="author" class="input-text" placeholder="Tìm theo tên tác giả..." />
           </div>
 
           <div class="input-with-icon">
             <i class="fa fa-book"></i>
-            <input type="text" class="input-text" placeholder="Tìm theo tiêu đề..." />
+            <input type="text" name="title" class="input-text" placeholder="Tìm theo tiêu đề..." />
           </div>
 
           <div class="filter-item">
             <div class="dropdown-check-list" id="categoryDropdown">
               <span class="anchor"><i class="fa fa-tags"></i> Chọn thể loại <span class="category-count">0</span></span>
               <ul class="items">
-                <li><input type="checkbox" id="cat1" name="category[]" value="1" /><label for="cat1">Tin tức</label>
-                </li>
-                <li><input type="checkbox" id="cat2" name="category[]" value="2" /><label for="cat2">Công nghệ</label>
-                </li>
-                <li><input type="checkbox" id="cat3" name="category[]" value="3" /><label for="cat3">Giải trí</label>
-                </li>
-                <li><input type="checkbox" id="cat4" name="category[]" value="4" /><label for="cat4">Thể thao</label>
-                </li>
-                <li><input type="checkbox" id="cat5" name="category[]" value="5" /><label for="cat5">Đời sống</label>
-                </li>
+                <?php
+                $categories = $adminModel->getAllCategories();
+                foreach ($categories as $category): ?>
+                  <li><input type="checkbox" id="cat<?php echo $category['id']; ?>" name="category[]"
+                      value="<?php echo $category['name']; ?>" /><label for="cat<?php echo $category['id']; ?>"><?php echo $category['name']; ?></label>
+                  </li>
+                <?php endforeach; ?>
                 <li class="clear-all"><button type="button" id="clearAllBtn">Xóa tất cả</button></li>
               </ul>
             </div>
@@ -74,60 +57,95 @@ $posts = array_slice($allPosts, $offset, $itemsPerPage);
 
       </div>
     </form>
+    <?php
+    $allPosts = $adminModel->getAllPosts()->fetch_all(MYSQLI_ASSOC);
+    if (isset($_GET['search'])) {
+      $allPosts = $adminModel->searchPosts($_GET['author'] ?? null, $_GET['title'] ?? null, $_GET['category'] ?? null)->fetch_all(MYSQLI_ASSOC);
+    }
+    if (isset($_GET['author']))
+      $allPosts = $adminModel->searchPosts($_GET['author'], null, null)->fetch_all(MYSQLI_ASSOC);
+    if (isset($_GET['category']))
+      $allPosts = $adminModel->searchPosts(null, null, $_GET['category'])->fetch_all(MYSQLI_ASSOC);
+    $totalItems = count($allPosts);
+    if (isset($_SESSION['username'])) {
+      $_SESSION['totalPostsUser'] = $adminModel->getAllPosts($_SESSION['username'])->num_rows;
+    }
+
+    // Thiết lập phân trang
+    $itemsPerPage = 5; // Số bài viết mỗi trang
+    $totalPages = ceil($totalItems / $itemsPerPage);
+    $currentPage = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+    $currentPage = min($currentPage, max(1, $totalPages)); // Đảm bảo trang hiện tại không vượt quá tổng số trang
+    
+    // Lấy dữ liệu cho trang hiện tại
+    $offset = ($currentPage - 1) * $itemsPerPage;
+    $posts = array_slice($allPosts, $offset, $itemsPerPage);
+    ?>
     <div id="section" class="box">
       <div id="content">
         <ul class="articles box">
-          <?php foreach ($posts as $post) : ?>
-          <li>
-            <h2><a href="#"><?php echo $post['title']; ?></a></h2>
-            <div class="article-info box">
-              <p class="f-right"><a href="#" class="comment">Comments (15)</a></p>
-              <p class="f-left"><?php echo date('d/m/Y H:i', strtotime($post['created'])); ?> | Posted by <a style="text-decoration: underline; color: red;" href="#"><?php echo $post['author']; ?></a> | Category: <a style="text-decoration: underline; color: red;"
-              href="#"><?php echo $post['category']; ?></a></p>
-            </div>
-            
-            <p><img src="<?php echo $post['image']; ?>" alt="" class="f-left" /><?php echo $post['short_content']; ?></p>
-            <p style="min-height: 30px;" class="more"><a href="#">Read more &raquo;</a></p>
-          </li>
+          <?php foreach ($posts as $post): ?>
+            <li>
+              <h2><a href="#"><?php echo $post['title']; ?></a></h2>
+              <div class="article-info box">
+                <p class="f-right"><a href="#" class="comment">Comments (15)</a></p>
+                <p class="f-left"><?php echo date('d/m/Y H:i', strtotime($post['created'])); ?> | Posted by <a
+                    style="text-decoration: underline; color: red;" href="index.php?author=<?php echo $post['author']; ?>"><?php echo $post['author']; ?></a> |
+                  Category: <a style="text-decoration: underline; color: red;"
+                    href="index.php?category[]=<?php echo $post['category']; ?>"><?php echo $post['category']; ?></a></p>
+              </div>
+
+              <p><img src="<?php echo $post['image']; ?>" alt="" class="f-left" /><?php echo $post['short_content']; ?>
+              </p>
+              <p style="min-height: 30px;" class="more"><a href="#">Read more &raquo;</a></p>
+            </li>
           <?php endforeach; ?>
-            
+
         </ul>
         <?php if ($totalItems > 0): ?>
-        <div class="pagination-container">
-          <!-- Nút về đầu -->
-          <a href="?page=1" class="pagination-arrow<?php echo ($currentPage <= 1) ? ' disabled' : ''; ?>" title="Về đầu">&laquo;&laquo;</a>
-          
-          <!-- Nút lùi 5 trang -->
-          <?php $prevPage = max(1, $currentPage - 5); ?>
-          <a href="?page=<?php echo $prevPage; ?>" class="pagination-arrow<?php echo ($currentPage <= 1) ? ' disabled' : ''; ?>" title="Lùi 5 trang">&laquo;</a>
-          
-          <!-- Các số trang -->
-          <div class="pagination-numbers">
-            <?php
-            $startPage = max(1, $currentPage - 2);
-            $endPage = min($totalPages, $startPage + 4);
-            $startPage = max(1, min($startPage, $endPage - 4));
-            
-            for ($i = $startPage; $i <= $endPage; $i++) :
-            ?>
-              <a href="?page=<?php echo $i; ?>" class="<?php echo ($i == $currentPage) ? 'active' : ''; ?>"><?php echo $i; ?></a>
-            <?php endfor; ?>
+          <div class="pagination-container">
+            <!-- Nút về đầu -->
+            <a href="?page=1" class="pagination-arrow<?php echo ($currentPage <= 1) ? ' disabled' : ''; ?>"
+              title="Về đầu">&laquo;&laquo;</a>
+
+            <!-- Nút lùi 5 trang -->
+            <?php $prevPage = max(1, $currentPage - 5); ?>
+            <a href="?page=<?php echo $prevPage; ?>"
+              class="pagination-arrow<?php echo ($currentPage <= 1) ? ' disabled' : ''; ?>"
+              title="Lùi 5 trang">&laquo;</a>
+
+            <!-- Các số trang -->
+            <div class="pagination-numbers">
+              <?php
+              $startPage = max(1, $currentPage - 2);
+              $endPage = min($totalPages, $startPage + 4);
+              $startPage = max(1, min($startPage, $endPage - 4));
+
+              for ($i = $startPage; $i <= $endPage; $i++):
+                ?>
+                <a href="?page=<?php echo $i; ?>"
+                  class="<?php echo ($i == $currentPage) ? 'active' : ''; ?>"><?php echo $i; ?></a>
+              <?php endfor; ?>
+            </div>
+
+            <!-- Nút tiến 5 trang -->
+            <?php $nextPage = min($totalPages, $currentPage + 5); ?>
+            <a href="?page=<?php echo $nextPage; ?>"
+              class="pagination-arrow<?php echo ($currentPage >= $totalPages) ? ' disabled' : ''; ?>"
+              title="Tiến 5 trang">&raquo;</a>
+
+            <!-- Nút đến cuối -->
+            <a href="?page=<?php echo $totalPages; ?>"
+              class="pagination-arrow<?php echo ($currentPage >= $totalPages) ? ' disabled' : ''; ?>"
+              title="Đến cuối">&raquo;&raquo;</a>
+
+            <!-- Hiển thị thông tin trang hiện tại/tổng số trang -->
+            <span style="margin-left: 15px; font-size: 14px;">
+              Trang <?php echo $currentPage; ?> / <?php echo $totalPages; ?>
+            </span>
+
+
           </div>
-          
-          <!-- Nút tiến 5 trang -->
-          <?php $nextPage = min($totalPages, $currentPage + 5); ?>
-          <a href="?page=<?php echo $nextPage; ?>" class="pagination-arrow<?php echo ($currentPage >= $totalPages) ? ' disabled' : ''; ?>" title="Tiến 5 trang">&raquo;</a>
-          
-          <!-- Nút đến cuối -->
-          <a href="?page=<?php echo $totalPages; ?>" class="pagination-arrow<?php echo ($currentPage >= $totalPages) ? ' disabled' : ''; ?>" title="Đến cuối">&raquo;&raquo;</a>
-          
-          <!-- Hiển thị thông tin trang hiện tại/tổng số trang -->
-          <span style="margin-left: 15px; font-size: 14px;">
-            Trang <?php echo $currentPage; ?> / <?php echo $totalPages; ?>
-          </span>
-          
-          
-        </div>
         <?php endif; ?>
       </div>
       <div id="aside">
@@ -208,7 +226,7 @@ $posts = array_slice($allPosts, $offset, $itemsPerPage);
           <label for="username">Tên đăng nhập</label>
           <input type="text" id="username" name="username" placeholder="Sử dụng làm tên tác giả đăng bài"
             class="form-control" pattern="^[a-zA-Z0-9 ]+$" required>
-          <small id="usernameMessage" class="form-text" >Tên đăng nhập chỉ chứa chữ cái và số</small>
+          <small id="usernameMessage" class="form-text">Tên đăng nhập chỉ chứa chữ cái và số</small>
         </div>
         <div class="form-group">
           <label for="email">Email</label>

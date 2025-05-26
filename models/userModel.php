@@ -111,4 +111,19 @@ class UserModel
          $sql = "SELECT * FROM post order by created desc";
       return $this->conn->query($sql);
    }
+   public function searchPosts($author = null, $title = null, $category = null)
+   {
+      $sql = "SELECT * FROM post where 1 = 1";
+      if (!empty($author))
+         $sql = "{$sql} and author like '%".$author."%'";
+      if (!empty($title))
+         $sql = "{$sql} AND title like '%".$title."%'";
+      if (!empty($category)) {
+         $category = implode("','", $category);
+         $sql = "{$sql} AND category IN ('$category')";
+      }
+      $sql = "{$sql} order by created desc";
+      return $this->conn->query($sql);
+   }
+
 }

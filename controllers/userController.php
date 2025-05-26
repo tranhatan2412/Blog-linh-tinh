@@ -20,17 +20,17 @@ switch ($action) {
       if (!empty($_FILES['picture']['name']))
          move_uploaded_file($_FILES['picture']['tmp_name'], '../img/' . $_FILES['picture']['name']);
       $userModel->updatePost($_GET['id']);
-      header('Location: ../views/post_list.php?username=' . $_GET['username'] . '&from='.$_GET['from']);
+      header('Location: ../views/post_list.php?username=' . $_GET['username'] . '&from=' . $_GET['from']);
       break;
    case 'deletePost':
       $userModel->deletePost($_GET['id']);
-      header('Location: ../views/post_list.php?username=' . $_GET['username'] . '&from='.$_GET['from']);
+      header('Location: ../views/post_list.php?username=' . $_GET['username'] . '&from=' . $_GET['from']);
       break;
    case 'register':
       $isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
-      
+
       $result = $userModel->register();
-      
+
       if ($isAjax) {
          header('Content-Type: application/json');
          echo json_encode($result);
@@ -45,9 +45,9 @@ switch ($action) {
       break;
    case 'login':
       $isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
-      
+
       $result = $userModel->login();
-      
+
       if ($isAjax) {
          header('Content-Type: application/json');
          echo json_encode($result);
