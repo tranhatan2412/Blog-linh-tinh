@@ -2,6 +2,9 @@
 include 'models/adminModel.php';
 
 $adminModel = new AdminModel();
+if(isset($_SESSION['username']))
+$_SESSION['totalPostsUser'] = $adminModel->getAllPostsByUser($_SESSION['username'])->num_rows;
+
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -64,12 +67,12 @@ $adminModel = new AdminModel();
     }
     if (isset($_GET['author']))
       $allPosts = $adminModel->searchPosts($_GET['author'], null, null)->fetch_all(MYSQLI_ASSOC);
+    if (isset($_GET['title']))
+      $allPosts = $adminModel->searchPosts(null, $_GET['title'], null)->fetch_all(MYSQLI_ASSOC);
     if (isset($_GET['category']))
       $allPosts = $adminModel->searchPosts(null, null, $_GET['category'])->fetch_all(MYSQLI_ASSOC);
     $totalItems = count($allPosts);
-    if (isset($_SESSION['username'])) {
-      $_SESSION['totalPostsUser'] = $adminModel->getAllPosts($_SESSION['username'])->num_rows;
-    }
+  
 
     // Thiết lập phân trang
     $itemsPerPage = 5; // Số bài viết mỗi trang
@@ -86,7 +89,7 @@ $adminModel = new AdminModel();
         <ul class="articles box">
           <?php foreach ($posts as $post): ?>
             <li>
-              <h2><a href="#"><?php echo $post['title']; ?></a></h2>
+              <h2><a href="views/full-content.php?id=<?php echo $post['id']; ?>"><?php echo $post['title']; ?></a></h2>
               <div class="article-info box">
                 <p class="f-right"><a href="#" class="comment">Comments (15)</a></p>
                 <p class="f-left"><?php echo date('d/m/Y H:i', strtotime($post['created'])); ?> | Posted by <a
@@ -97,7 +100,8 @@ $adminModel = new AdminModel();
 
               <p><img src="<?php echo $post['image']; ?>" alt="" class="f-left" /><?php echo $post['short_content']; ?>
               </p>
-              <p style="min-height: 30px;" class="more"><a href="#">Read more &raquo;</a></p>
+              <p style="min-height: 30px;" class="more"><a
+                  href="views/full-content.php?id=<?php echo $post['id']; ?>">Read more &raquo;</a></p>
             </li>
           <?php endforeach; ?>
 

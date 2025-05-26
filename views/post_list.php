@@ -115,13 +115,13 @@ if ($_SESSION['username'] === null) {
                         ?>
                         <div class="pagination-container">
                            <!-- Nút về đầu -->
-                           <a href="?page=1<?php echo isset($_GET['username']) ? '&username=' . urlencode($_GET['username']) : ''; ?><?php echo isset($_GET['link']) ? '&link=' . urlencode($_GET['link']) : ''; ?>"
+                           <a href="?page=1&username=<?php echo $_GET['username']; ?>&from=<?php echo $_GET['from']; ?>"
                               class="pagination-arrow<?php echo ($currentPage <= 1) ? ' disabled' : ''; ?>"
                               title="Về đầu">&laquo;&laquo;</a>
 
                            <!-- Nút lùi 1 trang -->
                            <?php $prevPage = max(1, $currentPage - 1); ?>
-                           <a href="?page=<?php echo $prevPage; ?><?php echo isset($_GET['username']) ? '&username=' . urlencode($_GET['username']) : ''; ?><?php echo isset($_GET['link']) ? '&link=' . urlencode($_GET['link']) : ''; ?>"
+                           <a href="?page=<?php echo $prevPage; ?>&username=<?php echo $_GET['username']; ?>&from=<?php echo $_GET['from']; ?>"
                               class="pagination-arrow<?php echo ($currentPage <= 1) ? ' disabled' : ''; ?>"
                               title="Trang trước">&laquo;</a>
 
@@ -139,19 +139,19 @@ if ($_SESSION['username'] === null) {
 
                               for ($i = $startPage; $i <= $endPage; $i++):
                                  ?>
-                                 <a href="?page=<?php echo $i; ?><?php echo isset($_GET['username']) ? '&username=' . urlencode($_GET['username']) : ''; ?><?php echo isset($_GET['link']) ? '&link=' . urlencode($_GET['link']) : ''; ?>"
+                                 <a href="?page=<?php echo $i; ?>&username=<?php echo $_GET['username']; ?>&from=<?php echo $_GET['from']; ?>"
                                     class="<?php echo ($i == $currentPage) ? 'active' : ''; ?>"><?php echo $i; ?></a>
                               <?php endfor; ?>
                            </div>
 
                            <!-- Nút tiến 1 trang -->
                            <?php $nextPage = min($totalPages, $currentPage + 1); ?>
-                           <a href="?page=<?php echo $nextPage; ?><?php echo isset($_GET['username']) ? '&username=' . urlencode($_GET['username']) : ''; ?><?php echo isset($_GET['link']) ? '&link=' . urlencode($_GET['link']) : ''; ?>"
+                           <a href="?page=<?php echo $nextPage; ?>&username=<?php echo $_GET['username']; ?>&from=<?php echo $_GET['from']; ?>"
                               class="pagination-arrow<?php echo ($currentPage >= $totalPages) ? ' disabled' : ''; ?>"
                               title="Trang sau">&raquo;</a>
 
                            <!-- Nút đến cuối -->
-                           <a href="?page=<?php echo $totalPages; ?><?php echo isset($_GET['username']) ? '&username=' . urlencode($_GET['username']) : ''; ?><?php echo isset($_GET['link']) ? '&link=' . urlencode($_GET['link']) : ''; ?>"
+                           <a href="?page=<?php echo $totalPages; ?>&username=<?php echo $_GET['username']; ?>&from=<?php echo $_GET['from']; ?>"
                               class="pagination-arrow<?php echo ($currentPage >= $totalPages) ? ' disabled' : ''; ?>"
                               title="Đến cuối">&raquo;&raquo;</a>
 

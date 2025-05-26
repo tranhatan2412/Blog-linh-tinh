@@ -53,9 +53,9 @@ class UserModel
 
       return ['success' => false, 'error' => "Yêu cầu không hợp lệ"];
    }
-   public function getAllPostsByUser()
+   public function getAllPostsByUser($username)
    {
-      $sql = "SELECT * FROM post where author = '$_SESSION[username]'";
+      $sql = "SELECT * FROM post where author = '$username'";
       return $this->conn->query($sql);
    }
    public function getPostById($id)
