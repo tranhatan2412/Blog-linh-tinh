@@ -82,7 +82,7 @@ if ($_SESSION['username'] === null) {
                               } else {
                                  foreach ($currentPosts as $post): ?>
                                     <li>
-                                       <h2><a href="#"><?php echo $post['title']; ?></a></h2>
+                                       <h2><a href="full-content.php?id=<?php echo $post['id']; ?>"><?php echo $post['title']; ?></a></h2>
                                        <div class="article-info box">
                                           <p class="f-right"><a href="#" class="comment">Comments (15)</a></p>
                                           <p class="f-left"><?php echo date('d/m/Y H:i', strtotime($post['created'])); ?> |
@@ -95,7 +95,7 @@ if ($_SESSION['username'] === null) {
                                        <p><img src="<?php echo $post['image']; ?>" alt=""
                                              class="f-left" /><?php echo $post['short_content']; ?></p>
 
-                                       <p style="min-height: 30px;" class="more"><a href="#">Read more &raquo;</a></p>
+                                       <p style="min-height: 30px;" class="more"><a href="full-content.php?id=<?php echo $post['id']; ?>">Read more &raquo;</a></p>
                                        <?php if (isset($_GET['from']) && $_GET['from'] === 'user') { ?>
                                           <a href="update_post.php?action=update&id=<?php echo $post['id']; ?>&username=<?php echo $_GET['username']; ?>"
                                              class="btn btn-primary"><i class="fa fa-edit"></i></a>
