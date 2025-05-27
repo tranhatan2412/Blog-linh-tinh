@@ -87,9 +87,9 @@ if ($_SESSION['username'] === null) {
                                           <p class="f-right"><a href="#" class="comment">Comments (15)</a></p>
                                           <p class="f-left"><?php echo date('d/m/Y H:i', strtotime($post['created'])); ?> |
                                              Posted by <a style="text-decoration: underline; color: red;"
-                                                href="#"><?php echo $post['author']; ?></a> | Category: <a
+                                                href="../index.php?author=<?php echo $post['author']; ?>"><?php echo $post['author']; ?></a> | Category: <a
                                                 style="text-decoration: underline; color: red;"
-                                                href="#"><?php echo $post['category']; ?></a></p>
+                                                href="../index.php?category[]=<?php echo $post['category']; ?>"><?php echo $post['category']; ?></a></p>
                                        </div>
 
                                        <p><img src="<?php echo $post['image']; ?>" alt=""

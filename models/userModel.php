@@ -114,10 +114,13 @@ class UserModel
    public function searchPosts($author = null, $title = null, $category = null)
    {
       $sql = "SELECT * FROM post where 1 = 1";
-      if (!empty($author))
-         $sql = "{$sql} and author like '%".$author."%'";
+      if (!empty($author)) {
+         if ($this->conn->query("SELECT * FROM user where username = '$author'")->num_rows === 0)
+            $sql = "{$sql} and author like '%" . $author . "%'";
+         else $sql = "{$sql} and author = '$author'";
+      }
       if (!empty($title))
-         $sql = "{$sql} AND title like '%".$title."%'";
+         $sql = "{$sql} AND title like '%" . $title . "%'";
       if (!empty($category)) {
          $category = implode("','", $category);
          $sql = "{$sql} AND category IN ('$category')";
