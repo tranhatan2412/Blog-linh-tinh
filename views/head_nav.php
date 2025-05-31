@@ -9,7 +9,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <div class="user-img-div">
                     <img src="/Admin/assets/img/user.png" class="img-thumbnail" />
                     <div class="inner-text">
-                        Nguyễn Thu Vân
+                        Trần Nhật Tân
                         <br />
                         <small>Last Login : 2 Weeks Ago </small>
                     </div>

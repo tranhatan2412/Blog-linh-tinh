@@ -61,7 +61,7 @@ $_SESSION['totalPostsUser'] = $adminModel->getAllPostsByUser($_SESSION['username
       </div>
     </form>
     <?php
-    $allPosts = $adminModel->getAllPosts()->fetch_all(MYSQLI_ASSOC);
+    $allPosts = $adminModel->getAllPostsCensored()->fetch_all(MYSQLI_ASSOC);
     if (isset($_GET['search'])) {
       $allPosts = $adminModel->searchPosts($_GET['author'] ?? null, $_GET['title'] ?? null, $_GET['category'] ?? null)->fetch_all(MYSQLI_ASSOC);
     }

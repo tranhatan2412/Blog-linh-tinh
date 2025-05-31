@@ -37,9 +37,11 @@ if ($_SESSION['username'] === null) {
             <div class="row">
                <div class="col-md-12" id="post-list">
                   <div class="panel panel-info">
+                     <?php if((isset($_GET['status']) && $_GET['status'] === '0') && isset($_GET['username'])) { ?>
                      <div class="panel-heading" style="text-align: center;">
-                        Post List <?php echo "of {$_GET['username']}"; ?>
+                        Post List <?php echo "of" . $_GET['username']; ?>
                      </div>
+                     <?php } ?>
                      <div class="panel-body">
                         <div class="table-responsive">
                            <ul class="articles box">
@@ -49,7 +51,9 @@ if ($_SESSION['username'] === null) {
                               $currentPage = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 
                               // Lấy tất cả bài viết
-                              $allPosts = (new UserModel())->getAllPosts($_GET['username']);
+                              $allPosts = (new UserModel())->getAllPosts($_GET['username'] ?? null);
+                              if(isset($_GET['status']) && $_GET['status'] === '0')
+                              $allPosts = (new UserModel())->getAllPostsUnCensored();
                               $totalItems = $allPosts->num_rows;
                               $totalPages = ceil($totalItems / $itemsPerPage);
 
@@ -100,9 +104,16 @@ if ($_SESSION['username'] === null) {
                                           <a href="update_post.php?action=update&id=<?php echo $post['id']; ?>&username=<?php echo $_GET['username']; ?>"
                                              class="btn btn-primary"><i class="fa fa-edit"></i></a>
                                        <?php } ?>
-                                       <a href="../controllers/userController.php?action=deletePost&id=<?php echo $post['id']; ?>&from=<?php echo $_GET['from']; ?>&username=<?php echo $_GET['username']; ?>"
+                                       <a href="../controllers/userController.php?action=deletePost&id=<?php echo $post['id']; ?>&from=<?php echo $_GET['from']; ?>&username=<?php echo $_GET['username'] ?? null; ?>"
                                           class="btn btn-danger" onclick="return confirm('Bạn có muốn xóa bài viết này?')"><i
                                              class="fa fa-trash"></i></a>
+                                       <?php if (isset($_GET['from']) && $_GET['from'] === 'user' && $post['status'] === '0') { ?>
+                                          <button style="pointer-events: none;" class="btn btn-success">Đang chờ duyệt</button>
+                                       <?php } ?>
+                                       <?php if (isset($_GET['from']) && $_GET['from'] === 'admin' && $post['status'] === '0') { ?>
+                                          <a href="../controllers/userController.php?action=updatePostStatus&id=<?php echo $post['id']; ?>&from=admin&status=0"
+                                             class="btn btn-success">Duyệt</a>
+                                       <?php } ?>
                                     </li>
                                  <?php endforeach;
                               } ?>
@@ -115,13 +126,13 @@ if ($_SESSION['username'] === null) {
                         ?>
                         <div class="pagination-container">
                            <!-- Nút về đầu -->
-                           <a href="?page=1&username=<?php echo $_GET['username']; ?>&from=<?php echo $_GET['from']; ?>"
+                           <a href="?page=1&username=<?php echo $_GET['username'] ?? null; ?>&from=<?php echo $_GET['from']; ?>"
                               class="pagination-arrow<?php echo ($currentPage <= 1) ? ' disabled' : ''; ?>"
                               title="Về đầu">&laquo;&laquo;</a>
 
                            <!-- Nút lùi 1 trang -->
                            <?php $prevPage = max(1, $currentPage - 1); ?>
-                           <a href="?page=<?php echo $prevPage; ?>&username=<?php echo $_GET['username']; ?>&from=<?php echo $_GET['from']; ?>"
+                           <a href="?page=<?php echo $prevPage; ?>&username=<?php echo $_GET['username'] ?? null; ?>&from=<?php echo $_GET['from']; ?>"
                               class="pagination-arrow<?php echo ($currentPage <= 1) ? ' disabled' : ''; ?>"
                               title="Trang trước">&laquo;</a>
 
@@ -139,19 +150,19 @@ if ($_SESSION['username'] === null) {
 
                               for ($i = $startPage; $i <= $endPage; $i++):
                                  ?>
-                                 <a href="?page=<?php echo $i; ?>&username=<?php echo $_GET['username']; ?>&from=<?php echo $_GET['from']; ?>"
+                                 <a href="?page=<?php echo $i; ?>&username=<?php echo $_GET['username'] ?? null; ?>&from=<?php echo $_GET['from']; ?>"
                                     class="<?php echo ($i == $currentPage) ? 'active' : ''; ?>"><?php echo $i; ?></a>
                               <?php endfor; ?>
                            </div>
 
                            <!-- Nút tiến 1 trang -->
                            <?php $nextPage = min($totalPages, $currentPage + 1); ?>
-                           <a href="?page=<?php echo $nextPage; ?>&username=<?php echo $_GET['username']; ?>&from=<?php echo $_GET['from']; ?>"
+                           <a href="?page=<?php echo $nextPage; ?>&username=<?php echo $_GET['username'] ?? null; ?>&from=<?php echo $_GET['from']; ?>"
                               class="pagination-arrow<?php echo ($currentPage >= $totalPages) ? ' disabled' : ''; ?>"
                               title="Trang sau">&raquo;</a>
 
                            <!-- Nút đến cuối -->
-                           <a href="?page=<?php echo $totalPages; ?>&username=<?php echo $_GET['username']; ?>&from=<?php echo $_GET['from']; ?>"
+                           <a href="?page=<?php echo $totalPages; ?>&username=<?php echo $_GET['username'] ?? null; ?>&from=<?php echo $_GET['from']; ?>"
                               class="pagination-arrow<?php echo ($currentPage >= $totalPages) ? ' disabled' : ''; ?>"
                               title="Đến cuối">&raquo;&raquo;</a>
 

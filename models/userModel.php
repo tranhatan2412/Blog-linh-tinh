@@ -55,7 +55,22 @@ class UserModel
    }
    public function getAllPostsByUser($username)
    {
-      $sql = "SELECT * FROM post where author = '$username'";
+      $sql = "SELECT * FROM post where author = '$username' order by created desc";
+      return $this->conn->query($sql);
+   }
+   public function updatePostStatus($id)
+   {
+      $sql = "UPDATE post SET status = 1 WHERE id = '$id'";
+      return $this->conn->query($sql);
+   }
+   public function getAllPostsCensored()
+   {
+      $sql = "SELECT * FROM post where status = true order by created desc";
+      return $this->conn->query($sql);
+   }
+   public function getAllPostsUnCensored()
+   {
+      $sql = "SELECT * FROM post where status = false order by created desc";
       return $this->conn->query($sql);
    }
    public function getPostById($id)
@@ -66,7 +81,8 @@ class UserModel
    public function addPost()
    {
       $image = '/Admin/img/' . basename($_FILES['picture']['name']);
-      $sql = "INSERT INTO post (title, short_content, full_content, author, category, image) VALUES ('$_POST[title]', '$_POST[short_content]', '$_POST[full_content]', '$_SESSION[username]', '$_POST[category]', '$image')";
+      $status = $_SESSION['role'] == 'admin' ? 1 : 0;
+      $sql = "INSERT INTO post (title, short_content, full_content, author, category, image, status) VALUES ('$_POST[title]', '$_POST[short_content]', '$_POST[full_content]', '$_SESSION[username]', '$_POST[category]', '$image', $status)";
       return $this->conn->query($sql);
    }
    public function updatePost($id)
@@ -113,7 +129,7 @@ class UserModel
    }
    public function searchPosts($author = null, $title = null, $category = null)
    {
-      $sql = "SELECT * FROM post where 1 = 1";
+      $sql = "SELECT * FROM post where status = true";
       if (!empty($author)) {
          if ($this->conn->query("SELECT * FROM user where username = '$author'")->num_rows === 0)
             $sql = "{$sql} and author like '%" . $author . "%'";

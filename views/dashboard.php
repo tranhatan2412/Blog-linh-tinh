@@ -1,5 +1,5 @@
 ﻿<?php
-session_start();
+include '../models/userModel.php';
 if ($_SESSION['username'] === null) {
     header('Location: ../index.php');
     exit();

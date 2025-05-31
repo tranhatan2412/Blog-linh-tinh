@@ -16,6 +16,10 @@ switch ($action) {
       $userModel->addPost();
       header('Location: ../views/new_post.php?action=new_post');
       break;
+   case 'updatePostStatus':
+      $userModel->updatePostStatus($_GET['id']);
+      header('Location: ../views/post_list.php?username=' . $_GET['username'] . '&from=' . $_GET['from']);
+      break;
    case 'updatePost':
       if (!empty($_FILES['picture']['name']))
          move_uploaded_file($_FILES['picture']['tmp_name'], '../img/' . $_FILES['picture']['name']);
